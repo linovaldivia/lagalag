@@ -6,57 +6,42 @@
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="webjars/bootstrap/4.1.3/css/bootstrap.min.css">
+    <!-- "Cover" bootstrap template -->
+    <link rel="stylesheet" href="res/css/cover.css">
 </head>
 <body>
-    <h1 th:text="'Hello World!'" ></h1>
-    <div class="my-3">
-    Powered by Bootstrap and Jquery!
+    <div class="site-wrapper">
+      <div class="site-wrapper-inner">
+        <div class="cover-container">
+          <div class="masthead clearfix">
+            <div class="inner">
+              <h3 class="masthead-brand">lagalag</h3>
+              <nav>
+                <!-- ul class="nav masthead-nav">
+                  <li class="active"><a href="#">Home</a></li>
+                  <li><a href="#">Features</a></li>
+                  <li><a href="#">Contact</a></li>
+                </ul -->
+              </nav>
+            </div>
+          </div>
+
+          <div class="inner cover">
+          Coming soon!
+          </div>
+
+          <div class="mastfoot">
+            <div class="inner">
+              <p>lagalag.com (c) 2018-2019</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-
-    <div id="buttonSet" style="display:none">
-	    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Primary</button>
-	    <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#exampleModal">Secondary</button>
-	    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModal">Success</button>
-	    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">Danger</button>
-	    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#exampleModal">Warning</button>
-	    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#exampleModal">Info</button>
-	    <button type="button" class="btn btn-light" data-toggle="modal" data-target="#exampleModal">Light</button>
-	    <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#exampleModal">Dark</button>
-    </div>    
-
-    <!-- Example bootstrap modal dialog box -->
-	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-	  <div class="modal-dialog modal-dialog-centered" role="document">
-	    <div class="modal-content">
-	      <div class="modal-header">
-	        <h5 class="modal-title" id="exampleModalLabel">This is a modal</h5>
-	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-	          <span aria-hidden="true">&times;</span>
-	        </button>
-	      </div>
-	      <div class="modal-body">
-	        Bootstrap with jQuery works ok!
-	      </div>
-	      <div class="modal-footer">
-	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-	      </div>
-	    </div>
-	  </div>
-	</div>
-
-    <!-- Placed at the end of the document so the pages load faster -->
+    
     <!-- jquery library -->
     <script src="webjars/jquery/3.3.1-1/jquery.min.js"></script>
     <!-- Bootstrap core JavaScript -->
     <script src="webjars/bootstrap/4.1.3/js/bootstrap.min.js"></script>
-    
-    <!-- jquery test script -->
-    <script>
-	    $(document).ready(function(){
-	       window.setTimeout(function() {
-		      $("#buttonSet").fadeIn();
-		   }, 700);
-		});
-    </script>
 </body>
 </html>
