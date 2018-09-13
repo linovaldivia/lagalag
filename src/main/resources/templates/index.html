@@ -7,7 +7,14 @@
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="webjars/bootstrap/4.1.3/css/bootstrap.min.css">
     <!-- "Cover" bootstrap template -->
-    <link rel="stylesheet" href="res/css/cover.css">
+    <link rel="stylesheet" href="res/css/cover-white.css">
+    <!-- Our styles -->
+    <link rel="stylesheet" href="res/css/lagalag.css">
+
+    <!-- jquery library -->
+    <script src="webjars/jquery/3.3.1-1/jquery.min.js" async defer></script>
+    <!-- Bootstrap core JavaScript -->
+    <script src="webjars/bootstrap/4.1.3/js/bootstrap.min.js" async defer></script>
 </head>
 <body>
     <div class="site-wrapper">
@@ -26,8 +33,9 @@
             </div>
           </div>
 
-          <div class="inner cover">
-          Coming soon!
+          <div id="map-container" class="inner cover">
+			<iframe id="map-frame" src="/map">
+			</iframe>          
           </div>
 
           <div class="mastfoot">
@@ -38,10 +46,5 @@
         </div>
       </div>
     </div>
-    
-    <!-- jquery library -->
-    <script src="webjars/jquery/3.3.1-1/jquery.min.js"></script>
-    <!-- Bootstrap core JavaScript -->
-    <script src="webjars/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 </body>
 </html>

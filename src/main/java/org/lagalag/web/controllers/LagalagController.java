@@ -11,4 +11,9 @@ public class LagalagController {
     public String homePage(Model model) {
         return "index";
     }
+    
+    @GetMapping("/map")
+    public String mapPage(Model model) {
+        return "map";
+    }
 }
