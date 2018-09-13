@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <style>
+      /* For maps to render with a width > 0, always explicitly set the dimensions of the map element, body, and html! */
+      html, body {
+        height: 100%;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        height: 100%;
+        width: 100%;
+      }
+    </style>
+    
+    <!-- jquery library -->
+    <script src="webjars/jquery/3.3.1-1/jquery.min.js" defer></script>
+    <!-- Our javascript functions -->
+    <script type="text/javascript" src="res/js/lagalag.js" defer></script>
+    
+    <!-- Google Maps. Requires an API key to be set in application.properties. 
+         Callback function to initialize the map is defined in lagalag.js -->    
+    <script type="text/javascript" 
+            src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap"
+            th:src="@{https://maps.googleapis.com/maps/api/js(key=${apiKey},callback=initMap)}"
+            defer>
+    </script>
+</head>
+<body>
+    <div id="map"></div>
+</body>
+</html>

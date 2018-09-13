@@ -4,6 +4,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+/**
+ * Encapsulates Spring-related programmatic application configuration.
+ *
+ */
 @Configuration
 public class WebConfigurer implements WebMvcConfigurer {
 	@Override
