@@ -9,4 +9,10 @@ More info to follow!
 
 Before running the app, make sure to rename `application.properties.FILLME` to just `application.properties` and set the properties specific to the deployment (e.g. the [Google Maps Javascript API key](https://developers.google.com/maps/documentation/javascript/get-api-key))
 
-After that, it's a simple matter of doing a `maven install` and pointing your browser to `<server-host>:8080`.
+After that, it's the typical maven song-and-dance:
+
+    $ mvn install
+    ...
+    $ java -jar target/web-0.0.1-SNAPSHOT.jar
+
+and then pointing your browser to `<server-host>:8080`.
