@@ -1,9 +1,19 @@
+html,
+body {
+    height: 100%;
+    background-color: #dfc999;
+}
+
+h3 {
+	color: #76323f;
+}
+
 @media (min-width: 992px) {
-  .masthead,
-  .mastfoot,
-  .cover-container {
-    width: 900px;
-  }
+	.masthead,
+	.mastfoot,
+	.cover-container {
+        width: 900px;
+	}
 }
 
 .inner {
