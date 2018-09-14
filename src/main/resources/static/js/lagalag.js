@@ -2,7 +2,8 @@
  * lagalag javascript functions.
  * Requires jquery to be loaded first in the containing document.
  */
-var map = null;
+var lagamap = null;
+var currentInfoWindow = null;
 
 function initMap() 
 {
@@ -33,9 +34,33 @@ function initMap()
         styles: mapStyles
     };
     
-    map = new google.maps.Map(mapCanvasElm, mapOptions);
+    lagamap = new google.maps.Map(mapCanvasElm, mapOptions);
     
+    // Add listener to the click event so we can display popups.
+    lagamap.addListener('click', onMapClick);
     console.log("Map created!");
+}
+
+function onMapClick(e) {
+    if (currentInfoWindow != null) {
+        currentInfoWindow.close();
+    }
+    var content = generateInfoWindowContent(e.latLng);
+    currentInfoWindow = new google.maps.InfoWindow({
+        content: content,
+        position: e.latLng
+    });
+    currentInfoWindow.open(lagamap);
+
+    // Pan and center the map on the click point.
+    lagamap.panTo(e.latLng);
+}
+
+function generateInfoWindowContent(latLng) {
+    return "Lat: " + latLng.lat().toFixed(3) + 
+           "<br/>Long: " + latLng.lng().toFixed(3) + 
+           "<br/><input type='checkbox'> Been here" +
+           "<br/><input type='checkbox'> Want to visit";    
 }
 
 $(document).ready(function () {
