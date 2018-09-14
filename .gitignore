@@ -1,6 +1,7 @@
 /target/
 !.mvn/wrapper/maven-wrapper.jar
 /src/main/resources/application.properties
+Thumbs.db
 
 ### STS ###
 .apt_generated
