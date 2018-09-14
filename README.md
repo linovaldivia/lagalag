@@ -16,3 +16,8 @@ After that, it's the typical maven song-and-dance:
     $ java -jar target/web-0.0.1-SNAPSHOT.jar
 
 and then pointing your browser to `<server-host>:8080`.
+
+Screenshot (as of Sep 14 2018):
+
+![screenshot](/screenshots/mainscreen.png)
+
