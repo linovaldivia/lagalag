@@ -6,9 +6,13 @@
   }
 }
 
+.inner {
+	padding: 0;
+}
+
 #map-container {
     width:100%;
-    height:400px;
+    height:500px;
 }
 
 #map-frame {
