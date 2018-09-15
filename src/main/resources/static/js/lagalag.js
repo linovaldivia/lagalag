@@ -1,9 +1,10 @@
 /**
  * lagalag javascript functions.
- * Requires jquery to be loaded first in the containing document.
+ * Requires jquery, revgeocode to be loaded first in the containing document.
  */
 var lagamap = null;
 var currentInfoWindow = null;
+var revGeocodeLookup = new RevGeocodeLookupService();
 
 function initMap() 
 {
@@ -49,7 +50,10 @@ function onMapClick(e) {
     lagamap.panTo(e.latLng);
     
     // Attempt to find nearest city(ies) to the click point.
-    reverseGeocodeLookup(e.latLng);
+    revGeocodeLookup.getPlaceNamesAtLocation(e.latLng.lat(), e.latLng.lng(), function(placeName) {
+        var content = generateInfoWindowContent(placeName, e.latLng);
+        showInfoWindow(content, e.latLng);
+    });
 }
 
 function closeInfoWindow() {
@@ -80,36 +84,6 @@ function generateInfoWindowContent(placeName, latLng) {
     return content;
 }
 
-function reverseGeocodeLookup(latLng) {
-    var lat = latLng.lat();
-    var lng = latLng.lng();
-    // Using the awesome (and free!) Nominatim reverse geocoding API 
-    // (https://wiki.openstreetmap.org/wiki/Nominatim#Reverse_Geocoding)
-    // TODO move to its own js file for easier reuse
-    var lookupUrl = "https://nominatim.openstreetmap.org/reverse?format=json&lat=" + lat + "&lon=" + lng + "&zoom=16&addressdetails=1";
-    console.log(lookupUrl);
-    $.get(lookupUrl, function(data) {
-        // console.info(data);
-        var placeName = getPlaceName(data);
-        var content = generateInfoWindowContent(placeName, latLng);
-        showInfoWindow(content, latLng);
-    });
-}
-
-function getPlaceName(data) {
-    if (data && data.address) {
-        if (data.address.city) {
-            return data.address.city;
-        } else if (data.address.town) {
-            return data.address.town;
-        } else if (data.address.village) {
-            return data.address.village;
-        } else {
-            // The place name could be under a different property name (e.g. "hamlet"?)
-            console.log(data.address);
-        }
-    }
-}
 
 $(document).ready(function () {
     console.log("Document ready!");
