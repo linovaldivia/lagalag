@@ -4,8 +4,8 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.lagalag</groupId>
-	<artifactId>web</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<artifactId>lagalag</artifactId>
+	<version>0.0.1</version>
 	<packaging>jar</packaging>
 
 	<name>lagalag.org web</name>
