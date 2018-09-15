@@ -13,11 +13,11 @@ After that, it's the typical maven song-and-dance:
 
     $ mvn install
     ...
-    $ java -jar target/web-0.0.1-SNAPSHOT.jar
+    $ java -jar target/lagalag-0.0.1.jar
 
 and then pointing your browser to `<server-host>:8080`.
 
-Screenshot (as of Sep 14 2018):
+Screenshot (as of Sep 15 2018): when clicking on the map, a popup showing the name of the closest city/town appears:
 
 ![screenshot](/screenshots/mainscreen.png)
 
