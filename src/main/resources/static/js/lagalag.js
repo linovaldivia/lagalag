@@ -38,29 +38,77 @@ function initMap()
     
     // Add listener to the click event so we can display popups.
     lagamap.addListener('click', onMapClick);
+    
     console.log("Map created!");
 }
 
 function onMapClick(e) {
+    closeInfoWindow();
+    
+    // Pan and center the map on the click point.
+    lagamap.panTo(e.latLng);
+    
+    // Attempt to find nearest city(ies) to the click point.
+    reverseGeocodeLookup(e.latLng);
+}
+
+function closeInfoWindow() {
     if (currentInfoWindow != null) {
         currentInfoWindow.close();
     }
-    var content = generateInfoWindowContent(e.latLng);
-    currentInfoWindow = new google.maps.InfoWindow({
-        content: content,
-        position: e.latLng
-    });
-    currentInfoWindow.open(lagamap);
-
-    // Pan and center the map on the click point.
-    lagamap.panTo(e.latLng);
 }
 
-function generateInfoWindowContent(latLng) {
-    return "Lat: " + latLng.lat().toFixed(3) + 
-           "<br/>Long: " + latLng.lng().toFixed(3) + 
-           "<br/><input type='checkbox'> Been here" +
-           "<br/><input type='checkbox'> Want to visit";    
+function showInfoWindow(content, position) {
+    currentInfoWindow = new google.maps.InfoWindow({
+        content: content,
+        position: position
+    });
+    currentInfoWindow.open(lagamap);
+}
+
+function generateInfoWindowContent(placeName, latLng) {
+    var content;
+    if (placeName) {
+        content = "Have you been to <b>" + placeName + "</b>?" +
+                  "<br/><br/><input type='checkbox'> Been here" +
+                  "<br/><input type='checkbox'> Want to visit";    
+    } else {
+        content = "Try clicking elsewhere!" +
+                  "<br/><br/>Lat: " + latLng.lat().toFixed(3) + 
+                  "<br/>Long: " + latLng.lng().toFixed(3);
+    }
+    return content;
+}
+
+function reverseGeocodeLookup(latLng) {
+    var lat = latLng.lat();
+    var lng = latLng.lng();
+    // Using the awesome (and free!) Nominatim reverse geocoding API 
+    // (https://wiki.openstreetmap.org/wiki/Nominatim#Reverse_Geocoding)
+    // TODO move to its own js file for easier reuse
+    var lookupUrl = "https://nominatim.openstreetmap.org/reverse?format=json&lat=" + lat + "&lon=" + lng + "&zoom=16&addressdetails=1";
+    console.log(lookupUrl);
+    $.get(lookupUrl, function(data) {
+        // console.info(data);
+        var placeName = getPlaceName(data);
+        var content = generateInfoWindowContent(placeName, latLng);
+        showInfoWindow(content, latLng);
+    });
+}
+
+function getPlaceName(data) {
+    if (data && data.address) {
+        if (data.address.city) {
+            return data.address.city;
+        } else if (data.address.town) {
+            return data.address.town;
+        } else if (data.address.village) {
+            return data.address.village;
+        } else {
+            // The place name could be under a different property name (e.g. "hamlet"?)
+            console.log(data.address);
+        }
+    }
 }
 
 $(document).ready(function () {
