@@ -1,0 +1,45 @@
+/* For maps to render with a width > 0, always explicitly set the dimensions of the map element, body, and html! */
+html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+  
+#map {
+    height: 100%;
+    width: 100%;
+}
+
+.lagalag-infowindow {
+    font-size: 16px;
+    padding: 5px;
+}
+
+.lagalag-infowindow .placename {
+    padding-bottom: 5px;
+}
+
+.lagalag-infowindow ul {
+    list-style: none;
+    margin: 0px;
+    padding: 2px;
+}
+
+/* "Fancy checkbox" css c/o this guy: https://codingwithspike.wordpress.com/2014/11/16/fancy-css-checkboxes-with-fontawesome/ */
+.fancy-checkbox input[type="checkbox"] {
+    display: none;
+}
+ 
+.fancy-checkbox span:before {
+    font-family: "FontAwesome";
+    font-style: normal;
+    width: 1em;
+    height: 1em;
+    content: '\f10c';
+    margin-right: .6em;
+}
+ 
+.fancy-checkbox input[type="checkbox"]:checked ~ span:before {
+    content: '\f05d';
+}

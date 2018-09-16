@@ -71,16 +71,20 @@ function showInfoWindow(content, position) {
 }
 
 function generateInfoWindowContent(placeName, latLng) {
-    var content;
+    var content = "<div class='lagalag-infowindow'>";
+
     if (placeName) {
-        content = "Have you been to <b>" + placeName + "</b>?" +
-                  "<br/><br/><input type='checkbox'> Been here" +
-                  "<br/><input type='checkbox'> Want to visit";    
+        content += "<div class='placename'>Have you been to <b>" + placeName + "</b>?</div>" +
+                   "<ul>" +
+                   "  <li><label class='fancy-checkbox'><input type='checkbox'/><span>Been here!</span></label></li>" +
+                   "  <li><label class='fancy-checkbox'><input type='checkbox'/><span>Want to visit!</span></label></li>" +
+                   "</ul>";
     } else {
-        content = "Try clicking elsewhere!" +
-                  "<br/><br/>Lat: " + latLng.lat().toFixed(3) + 
-                  "<br/>Long: " + latLng.lng().toFixed(3);
+        content += "Try clicking elsewhere!" +
+                   "<br/><br/>Lat: " + latLng.lat().toFixed(3) + 
+                   "<br/>Long: " + latLng.lng().toFixed(3);
     }
+    content += "</div>"
     return content;
 }
 
