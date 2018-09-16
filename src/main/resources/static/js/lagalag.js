@@ -76,8 +76,11 @@ function generateInfoWindowContent(placeName, latLng) {
     if (placeName) {
         content += "<div class='placename'>Have you been to <b>" + placeName + "</b>?</div>" +
                    "<ul>" +
-                   "  <li><label class='fancy-checkbox'><input type='checkbox'/><span>Been here!</span></label></li>" +
-                   "  <li><label class='fancy-checkbox'><input type='checkbox'/><span>Want to visit!</span></label></li>" +
+                   "  <li><label class='fancy-checkbox'><input type='checkbox'/><span class='been-there'>Been there!</span></label></li>" +
+                   "  <li><label class='fancy-checkbox'><input type='checkbox'/><span class='wanna-go'>Want to visit!</span></label></li>" +
+                   "  <li><label class='fancy-checkbox'><input type='checkbox'/><span class='loved-it'>Loved it!</span></label></li>" +
+                   "  <li><label class='fancy-checkbox'><input type='checkbox'/><span class='hated-it'>Hated it!</span></label></li>" +
+                   "  <li><label class='fancy-checkbox'><input type='checkbox'/><span class='no-thanks'>Not interested</span></label></li>" +
                    "</ul>";
     } else {
         content += "Try clicking elsewhere!" +

@@ -13,6 +13,7 @@ html, body {
 
 .lagalag-infowindow {
     font-size: 16px;
+    font-family: Helvetica;
     padding: 5px;
 }
 
@@ -32,14 +33,44 @@ html, body {
 }
  
 .fancy-checkbox span:before {
-    font-family: "FontAwesome";
+    font-family: "Font Awesome 5 Free";
     font-style: normal;
     width: 1em;
     height: 1em;
-    content: '\f10c';
+    font-weight: 400;
     margin-right: .6em;
+    cursor: pointer;
 }
- 
+
 .fancy-checkbox input[type="checkbox"]:checked ~ span:before {
-    content: '\f05d';
+	font-weight: 900;
+}
+
+.fancy-checkbox span.no-thanks:before {
+    content: '\f11a';    /* meh (emoji) */
+    color: orange;
+}
+
+.fancy-checkbox span.wanna-go:before {
+    content: '\f02e';   /* bookmark */
+    color: green;
+    margin-left: 2px;
+}
+
+.fancy-checkbox span.been-there:before {
+    content: '\f111';   /* circle */
+    color: blue;
+}
+
+.fancy-checkbox input[type="checkbox"]:checked ~ span.been-there:before {
+    content: '\f058';   /* check-circle */
+}
+
+.fancy-checkbox span.loved-it:before {
+    content: '\f004';   /* heart */
+    color: red;
+}
+
+.fancy-checkbox span.hated-it:before {
+    content: '\f165';   /* thumbs-down */
 }
