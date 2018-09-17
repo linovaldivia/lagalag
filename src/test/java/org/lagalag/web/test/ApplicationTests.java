@@ -1,4 +1,4 @@
-package org.lagalag.web;
+package org.lagalag.web.test;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -1,4 +1,4 @@
-package org.lagalag.web.controllers;
+package org.lagalag.web.controller;
 
 import org.lagalag.web.config.LagalagProperty;
 import org.springframework.beans.factory.annotation.Autowired;
