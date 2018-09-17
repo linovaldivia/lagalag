@@ -27,11 +27,19 @@ html, body {
     padding: 2px;
 }
 
+.lagalag-infowindow ul li {
+    padding: 2px 0;
+}
+
 /* "Fancy checkbox" css c/o this guy: https://codingwithspike.wordpress.com/2014/11/16/fancy-css-checkboxes-with-fontawesome/ */
 .fancy-checkbox input[type="checkbox"] {
     display: none;
 }
- 
+
+.fancy-checkbox span {
+	font-size: 18px;
+}
+
 .fancy-checkbox span:before {
     font-family: "Font Awesome 5 Free";
     font-style: normal;
