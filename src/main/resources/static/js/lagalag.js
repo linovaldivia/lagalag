@@ -77,11 +77,11 @@ function generateInfoWindowContent(placeName, latLng) {
     if (placeName) {
         content += "<div class='placename'>Have you been to <b>" + placeName + "</b>?</div>" +
                    "<ul>" +
-                   "  <li><label class='fancy-checkbox'><input type='checkbox'/><span class='yes-loved-it'></span><span class='place-sense'>Yes, I loved it!</span></label></li>" +
-                   "  <li><label class='fancy-checkbox'><input type='checkbox'/><span class='yes-meh'></span><span class='place-sense'>Yes, it was ok.</span></label></li>" +
-                   "  <li><label class='fancy-checkbox'><input type='checkbox'/><span class='yes-hated-it'></span><span class='place-sense'>Yes, I hated it!</span></label></li>" +
-                   "  <li><label class='fancy-checkbox'><input type='checkbox'/><span class='no-wanna-go'></span><span class='place-sense'>No, but I want to visit!</span></label></li>" +
-                   "  <li><label class='fancy-checkbox'><input type='checkbox'/><span class='not-interested'></span><span class='place-sense'>Nope, not interested</span></label></li>" +
+                   "  <li><label class='fancy-checkbox'><input type='checkbox'/><span class='yes-loved-it'>Yes, I loved it!</span></label></li>" +
+                   "  <li><label class='fancy-checkbox'><input type='checkbox'/><span class='yes-meh'>Yes, it was ok.</span></label></li>" +
+                   "  <li><label class='fancy-checkbox'><input type='checkbox'/><span class='yes-hated-it'>Yes, I hated it!</span></label></li>" +
+                   "  <li><label class='fancy-checkbox'><input type='checkbox'/><span class='no-wanna-go'>No, but I want to visit!</span></label></li>" +
+                   "  <li><label class='fancy-checkbox'><input type='checkbox'/><span class='not-interested'>Nope, not interested</span></label></li>" +
                    "</ul>";
     } else {
         content += "Try clicking elsewhere!" +

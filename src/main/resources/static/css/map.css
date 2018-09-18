@@ -40,6 +40,16 @@ html, body {
 .fancy-checkbox span {
 	font-size: 18px;
     cursor: pointer;
+    font-weight: 200;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Make the text bold when the user checks the corresponding checkbox */
+.fancy-checkbox input[type="checkbox"]:checked ~ span {
+    font-weight: 700;
 }
 
 .fancy-checkbox span::before {
@@ -49,14 +59,6 @@ html, body {
     height: 1em;
     font-weight: 400;
     margin-right: .6em;
-}
-
-.fancy-checkbox span.place-sense {
-    font-weight: 200;
-}
-
-.fancy-checkbox input[type="checkbox"]:checked ~ span.place-sense {
-    font-weight: 700;
 }
 
 .fancy-checkbox input[type="checkbox"]:checked ~ span::before {
@@ -88,4 +90,3 @@ html, body {
     content: '\f057';   /* times circle (x) */
     color: red;
 }
-
