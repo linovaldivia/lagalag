@@ -73,14 +73,15 @@ function showInfoWindow(content, position) {
 function generateInfoWindowContent(placeName, latLng) {
     var content = "<div class='lagalag-infowindow'>";
 
+    // TODO find a way to move this to the HTML instead of generating with js?
     if (placeName) {
         content += "<div class='placename'>Have you been to <b>" + placeName + "</b>?</div>" +
                    "<ul>" +
-                   "  <li><label class='fancy-checkbox'><input type='checkbox'/><span class='been-there'></span> Been there!</label></li>" +
-                   "  <li><label class='fancy-checkbox'><input type='checkbox'/><span class='wanna-go'></span> Want to visit!</label></li>" +
-                   "  <li><label class='fancy-checkbox'><input type='checkbox'/><span class='loved-it'></span> Loved it!</label></li>" +
-                   "  <li><label class='fancy-checkbox'><input type='checkbox'/><span class='hated-it'></span> Hated it!</label></li>" +
-                   "  <li><label class='fancy-checkbox'><input type='checkbox'/><span class='no-thanks'></span> Not interested</label></li>" +
+                   "  <li><label class='fancy-checkbox'><input type='checkbox'/><span class='yes-loved-it'></span><span class='place-sense'>Yes, I loved it!</span></label></li>" +
+                   "  <li><label class='fancy-checkbox'><input type='checkbox'/><span class='yes-meh'></span><span class='place-sense'>Yes, it was ok.</span></label></li>" +
+                   "  <li><label class='fancy-checkbox'><input type='checkbox'/><span class='yes-hated-it'></span><span class='place-sense'>Yes, I hated it!</span></label></li>" +
+                   "  <li><label class='fancy-checkbox'><input type='checkbox'/><span class='no-wanna-go'></span><span class='place-sense'>No, but I want to visit!</span></label></li>" +
+                   "  <li><label class='fancy-checkbox'><input type='checkbox'/><span class='not-interested'></span><span class='place-sense'>Nope, not interested</span></label></li>" +
                    "</ul>";
     } else {
         content += "Try clicking elsewhere!" +

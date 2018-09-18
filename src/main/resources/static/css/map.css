@@ -29,6 +29,7 @@ html, body {
 
 .lagalag-infowindow ul li {
     padding: 2px 0;
+    width: 235px;
 }
 
 /* "Fancy checkbox" css c/o this guy: https://codingwithspike.wordpress.com/2014/11/16/fancy-css-checkboxes-with-fontawesome/ */
@@ -38,47 +39,53 @@ html, body {
 
 .fancy-checkbox span {
 	font-size: 18px;
+    cursor: pointer;
 }
 
-.fancy-checkbox span:before {
+.fancy-checkbox span::before {
     font-family: "Font Awesome 5 Free";
     font-style: normal;
     width: 1em;
     height: 1em;
     font-weight: 400;
     margin-right: .6em;
-    cursor: pointer;
 }
 
-.fancy-checkbox input[type="checkbox"]:checked ~ span:before {
+.fancy-checkbox span.place-sense {
+    font-weight: 200;
+}
+
+.fancy-checkbox input[type="checkbox"]:checked ~ span.place-sense {
+    font-weight: 700;
+}
+
+.fancy-checkbox input[type="checkbox"]:checked ~ span::before {
 	font-weight: 900;
 }
 
-.fancy-checkbox span.no-thanks:before {
-    content: '\f11a';    /* meh (emoji) */
-    color: orange;
-}
-
-.fancy-checkbox span.wanna-go:before {
-    content: '\f02e';   /* bookmark */
-    color: green;
-    margin-left: 2px;
-}
-
-.fancy-checkbox span.been-there:before {
-    content: '\f111';   /* circle */
-    color: blue;
-}
-
-.fancy-checkbox input[type="checkbox"]:checked ~ span.been-there:before {
-    content: '\f058';   /* check-circle */
-}
-
-.fancy-checkbox span.loved-it:before {
+.fancy-checkbox span.yes-loved-it::before {
     content: '\f004';   /* heart */
     color: red;
 }
 
-.fancy-checkbox span.hated-it:before {
+.fancy-checkbox span.yes-meh::before {
+    content: '\f11a';    /* meh (emoji) */
+    color: orange;
+}
+
+.fancy-checkbox span.yes-hated-it::before {
     content: '\f165';   /* thumbs-down */
 }
+
+.fancy-checkbox span.no-wanna-go::before {
+    content: '\f02e';   /* bookmark */
+    color: green;
+    margin-left: .1em;
+    margin-right: .8em;
+}
+
+.fancy-checkbox span.not-interested::before {
+    content: '\f057';   /* times circle (x) */
+    color: red;
+}
+
