@@ -2,10 +2,17 @@
 
 ![screenshot](/screenshots/mainscreen.png)
 
--> _Screenshot (as of Sep 17 2018): when clicking on the map, a popup showing the name of the closest city/town appears. Users can give their opinion about the place._ <-
+_Screenshot (as of Sep 19 2018): when a user clicks on the map, a marker and a popup showing the name of the closest city/town appears. Users can give their opinion about the place._
 
 This project demonstrates the use of several popular web technologies to create a functional web application.
-The idea is to create a web page where users can mark the places they have visited on a world map, providing info on when they visited and for how long. From there stats and interesting info can be generated (e.g. how many countries have I visited, where did I go in 2015, when did I travel to Siem Reap, etc). Think TripAdvisor's "Cities I've Visited" app but with more cool stuff!
+
+The idea is to create a web page where users can mark the places they have visited on a world map, providing info on when they visited and for how long. From there stats and interesting info can be generated, e.g.
+
+* How many countries have I visited?
+* Where did I go in 2015?
+* When did I travel to Siem Reap? 
+
+Think TripAdvisor's "Cities I've Visited" app but with more cool stuff!
   
 More info to follow!
 
