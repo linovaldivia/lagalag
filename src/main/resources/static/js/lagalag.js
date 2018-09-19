@@ -51,8 +51,12 @@ function onMapClick(e) {
     
     // Attempt to find nearest city(ies) to the click point.
     revGeocodeLookup.getPlaceNamesAtLocation(e.latLng.lat(), e.latLng.lng(), function(placeName) {
-        var content = generateInfoWindowContent(placeName, e.latLng);
-        showInfoWindow(content, e.latLng);
+        // Place a marker only if we have a named place in the map.
+        if (placeName) {
+            var marker = placeMarker(e.latLng, placeName);
+        }
+        var content = generateInfoWindowContent(e.latLng, placeName);
+        showInfoWindow(e.latLng, content, marker);
     });
 }
 
@@ -62,15 +66,19 @@ function closeInfoWindow() {
     }
 }
 
-function showInfoWindow(content, position) {
-    currentInfoWindow = new google.maps.InfoWindow({
+function showInfoWindow(latLng, content, marker) {
+    var infoWindowOptions = {
         content: content,
-        position: position
-    });
-    currentInfoWindow.open(lagamap);
+    };
+    if (marker == undefined) {
+        // No marker created, so use the specified lat/lng instead.
+        infoWindowOptions.position = latLng;
+    }
+    currentInfoWindow = new google.maps.InfoWindow(infoWindowOptions);
+    currentInfoWindow.open(lagamap, marker);
 }
 
-function generateInfoWindowContent(placeName, latLng) {
+function generateInfoWindowContent(latLng, placeName) {
     var content = "<div class='lagalag-infowindow'>";
 
     // TODO find a way to move this to the HTML instead of generating with js?
@@ -92,6 +100,14 @@ function generateInfoWindowContent(placeName, latLng) {
     return content;
 }
 
+function placeMarker(latLng, placeName) {
+    var marker = new google.maps.Marker({
+        position: latLng,
+        map: lagamap,
+        title: placeName
+      });
+    return marker;
+}
 
 $(document).ready(function () {
     console.log("Document ready!");
