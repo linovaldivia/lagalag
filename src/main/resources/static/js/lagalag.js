@@ -45,18 +45,19 @@ function initMap()
 
 function onMapClick(e) {
     closePlaceSenseWindow();
-
-    // Pan and center the map on the click point.
-    lagamap.panTo(e.latLng);
     
     // Attempt to find nearest city(ies) to the click point.
     revGeocodeLookup.getPlaceNamesAtLocation(e.latLng.lat(), e.latLng.lng(), function(placeName) {
         // Place a marker only if we have a named place in the map.
         if (placeName) {
             var marker = createPlaceSenseMarker(e.latLng, placeName);
+            // Render the place sense window after the marker has been drawn for a smoother effect (at least in Chrome).
+            window.setTimeout(function() {
+                showPlaceSenseWindow(e.latLng, placeName, marker);
+            }, 100);
+        } else {
+            showPlaceSenseWindow(e.latLng);
         }
-        var content = generatePlaceSenseWindowContent(e.latLng, placeName);
-        showPlaceSenseWindow(e.latLng, content, marker);
     });
 }
 
@@ -68,15 +69,18 @@ function closePlaceSenseWindow() {
     }
 }
 
-function showPlaceSenseWindow(latLng, content, marker) {
+function showPlaceSenseWindow(latLng, placeName, marker) {
     if (placeSenseWindow == null) {
-        placeSenseWindow = new google.maps.InfoWindow();
+        placeSenseWindow = new google.maps.InfoWindow({
+            disableAutoPan: true,
+        });
     } 
     
+    var content = generatePlaceSenseWindowContent(latLng, placeName);
     placeSenseWindow.setContent(content);
     if (!marker) {
         placeSenseWindow.setPosition(latLng);
-    } 
+    }
     // Stash the marker associated with the window in the window itself.
     // Note that if there's no marker, it will effectively "remove" this dynamic property.
     placeSenseWindow.marker = marker;
@@ -84,6 +88,10 @@ function showPlaceSenseWindow(latLng, content, marker) {
     placeSenseWindow.addListener("closeclick", function() {
         // Remove the marker if the user closes the Place Sense window without saving (effectively cancelling). 
         removePlaceSenseMarker(placeSenseWindow.marker);
+    });
+    placeSenseWindow.addListener("domready", function() {
+        // Center the map on the place sense window.
+        lagamap.panTo(placeSenseWindow.getPosition());
     });
     placeSenseWindow.open(lagamap, marker);
 }
