@@ -11,23 +11,37 @@ html, body {
     width: 100%;
 }
 
-.lagalag-infowindow {
+#lagalag-nowhere-window-div {
+    display: none;	
+}
+
+#lagalag-place-sense-window-div {
+	display: none;
+}
+
+.lagalag-place-sense-window {
     font-size: 16px;
     font-family: Helvetica;
     padding: 5px;
 }
 
-.lagalag-infowindow .placename {
+.lagalag-nowhere-window {
+    font-size: 16px;
+    font-family: Helvetica;
+    padding: 7px;
+}
+
+#lagalag-place-name {
     padding-bottom: 5px;
 }
 
-.lagalag-infowindow ul {
+.lagalag-place-sense-window ul {
     list-style: none;
     margin: 0px;
     padding: 2px;
 }
 
-.lagalag-infowindow ul li {
+.lagalag-place-sense-window ul li {
     padding: 2px 0;
     width: 235px;
 }

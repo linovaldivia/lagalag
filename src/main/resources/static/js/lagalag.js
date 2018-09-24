@@ -45,7 +45,7 @@ function initMap()
 
 function onMapClick(e) {
     closePlaceSenseWindow();
-    
+
     // Pan and center the map on the click point.
     lagamap.panTo(e.latLng);
     
@@ -89,24 +89,12 @@ function showPlaceSenseWindow(latLng, content, marker) {
 }
 
 function generatePlaceSenseWindowContent(latLng, placeName) {
-    var content = "<div class='lagalag-infowindow'>";
-
-    // TODO find a way to move this to the HTML instead of generating with js?
     if (placeName) {
-        content += "<div class='placename'>Have you been to <b>" + placeName + "</b>?</div>" +
-                   "<ul>" +
-                   "  <li><label class='fancy-checkbox'><input type='checkbox'/><span class='yes-loved-it'>Yes, I loved it!</span></label></li>" +
-                   "  <li><label class='fancy-checkbox'><input type='checkbox'/><span class='yes-meh'>Yes, it was ok.</span></label></li>" +
-                   "  <li><label class='fancy-checkbox'><input type='checkbox'/><span class='yes-hated-it'>Yes, I hated it!</span></label></li>" +
-                   "  <li><label class='fancy-checkbox'><input type='checkbox'/><span class='no-wanna-go'>No, but I want to visit!</span></label></li>" +
-                   "  <li><label class='fancy-checkbox'><input type='checkbox'/><span class='not-interested'>Nope, not interested</span></label></li>" +
-                   "</ul>";
+        $("#lagalag-place-name").text(placeName);
+        var content = $("#lagalag-place-sense-window-div").html();
     } else {
-        content += "Try clicking elsewhere!" +
-                   "<br/><br/>Lat: " + latLng.lat().toFixed(3) + 
-                   "<br/>Long: " + latLng.lng().toFixed(3);
+        var content = $("#lagalag-nowhere-window-div").html();
     }
-    content += "</div>"
     return content;
 }
 
