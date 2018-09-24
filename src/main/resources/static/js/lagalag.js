@@ -37,8 +37,8 @@ function initMap()
     
     lagamap = new google.maps.Map(mapCanvasElm, mapOptions);
     
-    // Add listener to the click event so we can display popups.
     lagamap.addListener("click", onMapClick);
+    lagamap.addListener("zoom_changed", onZoomChanged);
     
     console.log("Map created!");
 }
@@ -64,6 +64,7 @@ function onMapClick(e) {
 function closePlaceSenseWindow() {
     if (placeSenseWindow != null) {
         placeSenseWindow.close();
+        placeSenseWindow.isOpen = false;
         // Remove the associated marker too, if there is one.
         removePlaceSenseMarker(placeSenseWindow.marker);
     }
@@ -86,14 +87,15 @@ function showPlaceSenseWindow(latLng, placeName, marker) {
     placeSenseWindow.marker = marker;
     
     placeSenseWindow.addListener("closeclick", function() {
+        placeSenseWindow.isOpen = false;
         // Remove the marker if the user closes the Place Sense window without saving (effectively cancelling). 
         removePlaceSenseMarker(placeSenseWindow.marker);
     });
     placeSenseWindow.addListener("domready", function() {
-        // Center the map on the place sense window.
-        lagamap.panTo(placeSenseWindow.getPosition());
+        recenterMapOnPlaceSenseWindow();
     });
     placeSenseWindow.open(lagamap, marker);
+    placeSenseWindow.isOpen = true;
 }
 
 function generatePlaceSenseWindowContent(latLng, placeName) {
@@ -121,3 +123,32 @@ function removePlaceSenseMarker(marker) {
         marker.setMap(null);
     }
 }
+
+function onZoomChanged() {
+    if (placeSenseWindow && placeSenseWindow.isOpen) {
+        recenterMapOnPlaceSenseWindow();
+    }
+}
+
+function recenterMapOnPlaceSenseWindow() {
+    var center = placeSenseWindow.getPosition();
+    if (placeSenseWindow.anchor && placeSenseWindow.anchor.anchorPoint) {
+        // Recompute the map center based on the window's anchor point.
+        center = offsetLatLng(center, placeSenseWindow.anchor.anchorPoint.x, placeSenseWindow.anchor.anchorPoint.y);
+    }
+    // Center the map on the place sense window.
+    lagamap.panTo(center);
+}
+
+function offsetLatLng(latLng, offX, offY) {
+    // For a better understanding of world and pixel coordinates (and translating between them),
+    // see https://developers.google.com/maps/documentation/javascript/coordinates 
+    var worldCoord = lagamap.getProjection().fromLatLngToPoint(latLng);
+    var scale = 1 << lagamap.getZoom();
+    var pixelCoordX = Math.floor(worldCoord.x * scale) + offX;
+    var pixelCoordY = Math.floor(worldCoord.y * scale) + offY;
+    worldCoord.x = pixelCoordX / scale;
+    worldCoord.y = pixelCoordY / scale;
+    return lagamap.getProjection().fromPointToLatLng(worldCoord);
+}
+
