@@ -28,10 +28,9 @@ html, body {
 .lagalag-nowhere-window {
     font-size: 16px;
     font-family: Helvetica;
-    padding: 7px;
 }
 
-#lagalag-place-name {
+.lagalag-place-sense-title {
     padding-bottom: 5px;
 }
 
