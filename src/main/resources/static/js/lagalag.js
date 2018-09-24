@@ -3,7 +3,7 @@
  * Requires jquery, revgeocode to be loaded first in the containing document.
  */
 var lagamap = null;
-var currentInfoWindow = null;
+var placeSenseWindow = null;
 var revGeocodeLookup = new RevGeocodeLookupService();
 
 function initMap() 
@@ -38,13 +38,13 @@ function initMap()
     lagamap = new google.maps.Map(mapCanvasElm, mapOptions);
     
     // Add listener to the click event so we can display popups.
-    lagamap.addListener('click', onMapClick);
+    lagamap.addListener("click", onMapClick);
     
     console.log("Map created!");
 }
 
 function onMapClick(e) {
-    closeInfoWindow();
+    closePlaceSenseWindow();
     
     // Pan and center the map on the click point.
     lagamap.panTo(e.latLng);
@@ -53,32 +53,42 @@ function onMapClick(e) {
     revGeocodeLookup.getPlaceNamesAtLocation(e.latLng.lat(), e.latLng.lng(), function(placeName) {
         // Place a marker only if we have a named place in the map.
         if (placeName) {
-            var marker = placeMarker(e.latLng, placeName);
+            var marker = createPlaceSenseMarker(e.latLng, placeName);
         }
-        var content = generateInfoWindowContent(e.latLng, placeName);
-        showInfoWindow(e.latLng, content, marker);
+        var content = generatePlaceSenseWindowContent(e.latLng, placeName);
+        showPlaceSenseWindow(e.latLng, content, marker);
     });
 }
 
-function closeInfoWindow() {
-    if (currentInfoWindow != null) {
-        currentInfoWindow.close();
+function closePlaceSenseWindow() {
+    if (placeSenseWindow != null) {
+        placeSenseWindow.close();
+        // Remove the associated marker too, if there is one.
+        removePlaceSenseMarker(placeSenseWindow.marker);
     }
 }
 
-function showInfoWindow(latLng, content, marker) {
-    var infoWindowOptions = {
-        content: content,
-    };
-    if (marker == undefined) {
-        // No marker created, so use the specified lat/lng instead.
-        infoWindowOptions.position = latLng;
-    }
-    currentInfoWindow = new google.maps.InfoWindow(infoWindowOptions);
-    currentInfoWindow.open(lagamap, marker);
+function showPlaceSenseWindow(latLng, content, marker) {
+    if (placeSenseWindow == null) {
+        placeSenseWindow = new google.maps.InfoWindow();
+    } 
+    
+    placeSenseWindow.setContent(content);
+    if (!marker) {
+        placeSenseWindow.setPosition(latLng);
+    } 
+    // Stash the marker associated with the window in the window itself.
+    // Note that if there's no marker, it will effectively "remove" this dynamic property.
+    placeSenseWindow.marker = marker;
+    
+    placeSenseWindow.addListener("closeclick", function() {
+        // Remove the marker if the user closes the Place Sense window without saving (effectively cancelling). 
+        removePlaceSenseMarker(placeSenseWindow.marker);
+    });
+    placeSenseWindow.open(lagamap, marker);
 }
 
-function generateInfoWindowContent(latLng, placeName) {
+function generatePlaceSenseWindowContent(latLng, placeName) {
     var content = "<div class='lagalag-infowindow'>";
 
     // TODO find a way to move this to the HTML instead of generating with js?
@@ -100,7 +110,7 @@ function generateInfoWindowContent(latLng, placeName) {
     return content;
 }
 
-function placeMarker(latLng, placeName) {
+function createPlaceSenseMarker(latLng, placeName) {
     var marker = new google.maps.Marker({
         position: latLng,
         map: lagamap,
@@ -109,6 +119,9 @@ function placeMarker(latLng, placeName) {
     return marker;
 }
 
-$(document).ready(function () {
-    console.log("Document ready!");
-});
+function removePlaceSenseMarker(marker) {
+    if (marker) {
+        // Setting the map to null removes a marker.
+        marker.setMap(null);
+    }
+}
