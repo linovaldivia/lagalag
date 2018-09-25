@@ -75,6 +75,16 @@ function showPlaceSenseWindow(latLng, placeName, marker) {
         placeSenseWindow = new google.maps.InfoWindow({
             disableAutoPan: true,
         });
+        placeSenseWindow.addListener("closeclick", function() {
+            placeSenseWindow.isOpen = false;
+            // Remove the marker if the window is cancelled. 
+            removePlaceSenseMarker(placeSenseWindow.marker);
+        });
+        placeSenseWindow.addListener("domready", function() {
+            $("#lagalag-place-sense-save").click(onPlaceSenseWindowSave);
+            $("#lagalag-place-sense-cancel").click(onPlaceSenseWindowCancel);
+            recenterMapOnPlaceSenseWindow();
+        });
     } 
     
     var content = generatePlaceSenseWindowContent(latLng, placeName);
@@ -85,15 +95,6 @@ function showPlaceSenseWindow(latLng, placeName, marker) {
     // Stash the marker associated with the window in the window itself.
     // Note that if there's no marker, it will effectively "remove" this dynamic property.
     placeSenseWindow.marker = marker;
-    
-    placeSenseWindow.addListener("closeclick", function() {
-        placeSenseWindow.isOpen = false;
-        // Remove the marker if the user closes the Place Sense window without saving (effectively cancelling). 
-        removePlaceSenseMarker(placeSenseWindow.marker);
-    });
-    placeSenseWindow.addListener("domready", function() {
-        recenterMapOnPlaceSenseWindow();
-    });
     placeSenseWindow.open(lagamap, marker);
     placeSenseWindow.isOpen = true;
 }
@@ -152,3 +153,14 @@ function offsetLatLng(latLng, offX, offY) {
     return lagamap.getProjection().fromPointToLatLng(worldCoord);
 }
 
+function onPlaceSenseWindowSave() {
+    // TODO same as cancel for now
+    onPlaceSenseWindowCancel();
+}
+
+function onPlaceSenseWindowCancel() {
+    closePlaceSenseWindow();
+}
+
+$(document).ready(function() {
+});

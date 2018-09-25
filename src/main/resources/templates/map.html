@@ -3,6 +3,9 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" type="text/css" href="webjars/bootstrap/4.1.3/css/bootstrap.min.css">
+    
     <!-- The awesome Fontawesome CSS -->
     <link rel="stylesheet" type="text/css" href="webjars/font-awesome/5.3.1/css/all.min.css">
     
@@ -27,7 +30,7 @@
     <div id="map"></div>
     <div id="lagalag-place-sense-window-div">
         <div class="lagalag-place-sense-window">
-            <div class="lagalag-place-sense-title">Have you been to <b id="lagalag-place-name">me</b>?</div>
+            <div class="lagalag-place-sense-title">Have you been to <span id="lagalag-place-name" class="font-weight-bold">me</span>?</div>
             <ul>
                 <li><label class='fancy-checkbox'><input type='checkbox'/><span class='yes-loved-it'>Yes, I loved it!</span></label></li>
                 <li><label class='fancy-checkbox'><input type='checkbox'/><span class='yes-meh'>Yes, it was ok.</span></label></li>
@@ -35,6 +38,8 @@
                 <li><label class='fancy-checkbox'><input type='checkbox'/><span class='no-wanna-go'>No, but I want to visit!</span></label></li>
                 <li><label class='fancy-checkbox'><input type='checkbox'/><span class='not-interested'>Nope, not interested</span></label></li>
             </ul>
+            <button type="button" id="lagalag-place-sense-save" class="btn btn-primary btn-sm">Save</button>
+            <button type="button" id="lagalag-place-sense-cancel" class="btn btn-secondary btn-sm">Cancel</button>
         </div>
     </div>
     <div id="lagalag-nowhere-window-div">

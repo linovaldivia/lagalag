@@ -41,17 +41,20 @@ html, body {
 }
 
 .lagalag-place-sense-window ul li {
-    padding: 2px 0;
     width: 235px;
 }
 
 /* "Fancy checkbox" css c/o this guy: https://codingwithspike.wordpress.com/2014/11/16/fancy-css-checkboxes-with-fontawesome/ */
+.fancy-checkbox {
+    margin-bottom: .3em;
+}
+
 .fancy-checkbox input[type="checkbox"] {
     display: none;
 }
 
 .fancy-checkbox span {
-	font-size: 18px;
+	font-size: 16px;
     cursor: pointer;
     font-weight: 200;
     -webkit-user-select: none;
