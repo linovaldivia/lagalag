@@ -1,51 +1,52 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    
-    <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" type="text/css" href="webjars/bootstrap/4.1.3/css/bootstrap.min.css">
-    
-    <!-- The awesome Fontawesome CSS -->
-    <link rel="stylesheet" type="text/css" href="webjars/font-awesome/5.3.1/css/all.min.css">
-    
-    <link rel="stylesheet" type="text/css" href="res/css/map.css">
-    
-    <!-- jquery library -->
-    <script src="webjars/jquery/3.3.1-1/jquery.min.js" defer></script>
-    <!-- Reverse geocode lookup service -->
-    <script type="text/javascript" src="res/js/revgeocode.js" defer></script>
-    <!-- Our javascript functions -->
-    <script type="text/javascript" src="res/js/lagalag.js" defer></script>
-    
-    <!-- Google Maps. Requires an API key to be set in application.properties. 
-         Callback function to initialize the map is defined in lagalag.js -->    
-    <script type="text/javascript" 
-            src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap"
-            th:src="@{https://maps.googleapis.com/maps/api/js(key=${apiKey},callback=initMap)}"
-            defer>
-    </script>
-</head>
-<body>
-    <div id="map"></div>
-    <div id="lagalag-place-sense-window-div">
-        <div class="lagalag-place-sense-window">
-            <div class="lagalag-place-sense-title">Have you been to <span id="lagalag-place-name" class="font-weight-bold">me</span>?</div>
-            <ul>
-                <li><label class='fancy-checkbox'><input type='checkbox'/><span class='yes-loved-it'>Yes, I loved it!</span></label></li>
-                <li><label class='fancy-checkbox'><input type='checkbox'/><span class='yes-meh'>Yes, it was ok.</span></label></li>
-                <li><label class='fancy-checkbox'><input type='checkbox'/><span class='yes-hated-it'>Yes, I hated it!</span></label></li>
-                <li><label class='fancy-checkbox'><input type='checkbox'/><span class='no-wanna-go'>No, but I want to visit!</span></label></li>
-                <li><label class='fancy-checkbox'><input type='checkbox'/><span class='not-interested'>Nope, not interested</span></label></li>
-            </ul>
-            <button type="button" id="lagalag-place-sense-save" class="btn btn-primary btn-sm">Save</button>
-            <button type="button" id="lagalag-place-sense-cancel" class="btn btn-secondary btn-sm">Cancel</button>
-        </div>
-    </div>
-    <div id="lagalag-nowhere-window-div">
-        <div class="lagalag-nowhere-window">
-            <p>Try zooming in and/or clicking elsewhere!</p>
-        </div>
-    </div>
-</body>
+	<head>
+	    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	    
+	    <!-- Bootstrap core CSS -->
+	    <link rel="stylesheet" type="text/css" th:href="@{webjars/bootstrap/{version}/css/bootstrap.min.css(version=${bootstrapVersion})}">
+	    <!-- The awesome Fontawesome CSS -->
+	    <link rel="stylesheet" type="text/css" th:href="@{webjars/font-awesome/{version}/css/all.min.css(version=${faVersion})}">
+	    <!-- Our css for this map document -->
+	    <link rel="stylesheet" type="text/css" href="res/css/map.css">
+	    
+	    <!-- jquery library -->
+	    <script th:src="@{webjars/jquery/{version}/jquery.min.js(version=${jqueryVersion})}" defer></script>
+	    <!-- Reverse geocode lookup service -->
+	    <script type="text/javascript" src="res/js/revgeocode.js" defer></script>
+	    <!-- Our javascript functions -->
+	    <script type="text/javascript" src="res/js/lagalag.js" defer></script>
+	    
+	    <!-- Google Maps. Requires an API key to be set in application.properties. 
+	         Callback function to initialize the map is defined in lagalag.js -->    
+	    <script type="text/javascript" 
+	            src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap"
+	            th:src="@{https://maps.googleapis.com/maps/api/js(key=${apiKey},callback=initMap)}"
+	            defer>
+	    </script>
+	</head>
+	<body>
+        <!-- Map will be rendered inside this div. -->
+	    <div id="map"></div>
+	    
+	    <div id="lagalag-place-sense-window-div">
+	        <div class="lagalag-place-sense-window">
+	            <div class="lagalag-place-sense-title">Have you been to <span id="lagalag-place-name" class="font-weight-bold">me</span>?</div>
+	            <ul>
+	                <li><label class='fancy-checkbox'><input type='checkbox'/><span class='yes-loved-it'>Yes, I loved it!</span></label></li>
+	                <li><label class='fancy-checkbox'><input type='checkbox'/><span class='yes-meh'>Yes, it was ok.</span></label></li>
+	                <li><label class='fancy-checkbox'><input type='checkbox'/><span class='yes-hated-it'>Yes, I hated it!</span></label></li>
+	                <li><label class='fancy-checkbox'><input type='checkbox'/><span class='no-wanna-go'>No, but I want to visit!</span></label></li>
+	                <li><label class='fancy-checkbox'><input type='checkbox'/><span class='not-interested'>Nope, not interested</span></label></li>
+	            </ul>
+	            <button type="button" id="lagalag-place-sense-save" class="btn btn-primary btn-sm">Save</button>
+	            <button type="button" id="lagalag-place-sense-cancel" class="btn btn-secondary btn-sm">Cancel</button>
+	        </div>
+	    </div>
+	    <div id="lagalag-nowhere-window-div">
+	        <div class="lagalag-nowhere-window">
+	            <p>Try zooming in and/or clicking elsewhere!</p>
+	        </div>
+	    </div>
+	</body>
 </html>
