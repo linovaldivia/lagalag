@@ -2,12 +2,20 @@
  * lagalag javascript functions.
  * Requires jquery, revgeocode to be loaded first in the containing document.
  */
-var lagamap = null;
-var placeSenseWindow = null;
-var revGeocodeLookup = new RevGeocodeLookupService();
+var gLagamap = null;
+var gPlaceSenseWindow = null;
+var gCurrentMarker = null;
+var gPlace = null;
+var gRevGeocodeLookup = new RevGeocodeLookupService();
 
-function initMap() 
-{
+const PS_YES_LOVED_IT_ID = "yes-love";
+const PS_YES_MEH_ID      = "yes-meh";
+const PS_YES_HATED_IT_ID = "yes-hate";
+const PS_NO_WANNA_GO     = "no-wanna-go";
+const PS_NOT_INTERESTED  = "not-interested";
+const PLACE_SENSE_IDS    = [ PS_YES_LOVED_IT_ID, PS_YES_MEH_ID, PS_YES_HATED_IT_ID, PS_NO_WANNA_GO, PS_NOT_INTERESTED ];
+
+function initMap() {
     console.log("Creating map...");
     // Get native DOM element (not the jquery reference).
     var mapCanvasElm = $("#map")[0];
@@ -28,29 +36,29 @@ function initMap()
         center: center,
         zoom: zoomLevel,
         mapTypeId: google.maps.MapTypeId.ROADMAP,
-        // mapTypeId: google.maps.MapTypeId.HYBRID,
         streetViewControl: false,
         mapTypeControl: false,
         fullscreenControl: false,
         styles: mapStyles
     };
     
-    lagamap = new google.maps.Map(mapCanvasElm, mapOptions);
+    gLagamap = new google.maps.Map(mapCanvasElm, mapOptions);
     
-    lagamap.addListener("click", onMapClick);
-    lagamap.addListener("zoom_changed", onZoomChanged);
+    gLagamap.addListener("click", onMapClick);
+    gLagamap.addListener("zoom_changed", onZoomChanged);
     
     console.log("Map created!");
 }
 
 function onMapClick(e) {
-    closePlaceSenseWindow();
+    closePlaceSenseWindowAndRemoveMarker();
     
     // Attempt to find nearest city(ies) to the click point.
-    revGeocodeLookup.getPlaceNamesAtLocation(e.latLng.lat(), e.latLng.lng(), function(placeName) {
+    gRevGeocodeLookup.getPlaceNamesAtLocation(e.latLng.lat(), e.latLng.lng(), function(placeName) {
         // Place a marker only if we have a named place in the map.
         if (placeName) {
-            var marker = createPlaceSenseMarker(e.latLng, placeName);
+            storeCurrentPlace(e.latLng, placeName);
+            var marker = createMarker(e.latLng, placeName);
             // Render the place sense window after the marker has been drawn for a smoother effect (at least in Chrome).
             window.setTimeout(function() {
                 showPlaceSenseWindow(e.latLng, placeName, marker);
@@ -61,26 +69,17 @@ function onMapClick(e) {
     });
 }
 
-function closePlaceSenseWindow() {
-    if (placeSenseWindow != null) {
-        placeSenseWindow.close();
-        placeSenseWindow.isOpen = false;
-        // Remove the associated marker too, if there is one.
-        removePlaceSenseMarker(placeSenseWindow.marker);
-    }
+function storeCurrentPlace(latLng, placeName) {
+    gPlace = { name: placeName, lat: latLng.lat(), lng: latLng.lng() };
 }
 
 function showPlaceSenseWindow(latLng, placeName, marker) {
-    if (placeSenseWindow == null) {
-        placeSenseWindow = new google.maps.InfoWindow({
+    if (gPlaceSenseWindow == null) {
+        gPlaceSenseWindow = new google.maps.InfoWindow({
             disableAutoPan: true,
         });
-        placeSenseWindow.addListener("closeclick", function() {
-            placeSenseWindow.isOpen = false;
-            // Remove the marker if the window is cancelled. 
-            removePlaceSenseMarker(placeSenseWindow.marker);
-        });
-        placeSenseWindow.addListener("domready", function() {
+        gPlaceSenseWindow.addListener("closeclick", onPlaceSenseWindowCancel);
+        gPlaceSenseWindow.addListener("domready", function() {
             $("#lagalag-place-sense-save").click(onPlaceSenseWindowSave);
             $("#lagalag-place-sense-cancel").click(onPlaceSenseWindowCancel);
             recenterMapOnPlaceSenseWindow();
@@ -88,15 +87,14 @@ function showPlaceSenseWindow(latLng, placeName, marker) {
     } 
     
     var content = generatePlaceSenseWindowContent(latLng, placeName);
-    placeSenseWindow.setContent(content);
+    gPlaceSenseWindow.setContent(content);
     if (!marker) {
-        placeSenseWindow.setPosition(latLng);
+        gPlaceSenseWindow.setPosition(latLng);
     }
-    // Stash the marker associated with the window in the window itself.
-    // Note that if there's no marker, it will effectively "remove" this dynamic property.
-    placeSenseWindow.marker = marker;
-    placeSenseWindow.open(lagamap, marker);
-    placeSenseWindow.isOpen = true;
+
+    setCurrentMarker(marker);
+    gPlaceSenseWindow.open(gLagamap, marker);
+    gPlaceSenseWindow.isOpen = true;
 }
 
 function generatePlaceSenseWindowContent(latLng, placeName) {
@@ -109,57 +107,100 @@ function generatePlaceSenseWindowContent(latLng, placeName) {
     return content;
 }
 
-function createPlaceSenseMarker(latLng, placeName) {
+function createMarker(latLng, placeName) {
     var marker = new google.maps.Marker({
         position: latLng,
-        map: lagamap,
+        map: gLagamap,
         title: placeName
       });
     return marker;
 }
 
-function removePlaceSenseMarker(marker) {
-    if (marker) {
-        // Setting the map to null removes a marker.
-        marker.setMap(null);
+function setCurrentMarker(marker) {
+    gCurrentMarker = marker;
+}
+
+function clearCurrentMarker() {
+    gCurrentMarker = null;
+}
+
+function removeCurrentMarkerFromMap() {
+    if (gCurrentMarker) {
+        gCurrentMarker.setMap(null);
+    }
+    clearCurrentMarker();
+}
+
+function closePlaceSenseWindow() {
+    if (gPlaceSenseWindow != null) {
+        gPlaceSenseWindow.close();
+        gPlaceSenseWindow.isOpen = false;
+    }
+}
+
+function closePlaceSenseWindowAndRemoveMarker() {
+    if (gPlaceSenseWindow != null) {
+        closePlaceSenseWindow();
+        removeCurrentMarkerFromMap();
     }
 }
 
 function onZoomChanged() {
-    if (placeSenseWindow && placeSenseWindow.isOpen) {
+    if (gPlaceSenseWindow && gPlaceSenseWindow.isOpen) {
         recenterMapOnPlaceSenseWindow();
     }
 }
 
 function recenterMapOnPlaceSenseWindow() {
-    var center = placeSenseWindow.getPosition();
-    if (placeSenseWindow.anchor && placeSenseWindow.anchor.anchorPoint) {
+    var center = gPlaceSenseWindow.getPosition();
+    if (gPlaceSenseWindow.anchor && gPlaceSenseWindow.anchor.anchorPoint) {
         // Recompute the map center based on the window's anchor point.
-        center = offsetLatLng(center, placeSenseWindow.anchor.anchorPoint.x, placeSenseWindow.anchor.anchorPoint.y);
+        center = offsetLatLng(center, gPlaceSenseWindow.anchor.anchorPoint.x, gPlaceSenseWindow.anchor.anchorPoint.y);
     }
     // Center the map on the place sense window.
-    lagamap.panTo(center);
+    gLagamap.panTo(center);
 }
 
 function offsetLatLng(latLng, offX, offY) {
     // For a better understanding of world and pixel coordinates (and translating between them),
     // see https://developers.google.com/maps/documentation/javascript/coordinates 
-    var worldCoord = lagamap.getProjection().fromLatLngToPoint(latLng);
-    var scale = 1 << lagamap.getZoom();
+    var worldCoord = gLagamap.getProjection().fromLatLngToPoint(latLng);
+    var scale = 1 << gLagamap.getZoom();
     var pixelCoordX = Math.floor(worldCoord.x * scale) + offX;
     var pixelCoordY = Math.floor(worldCoord.y * scale) + offY;
     worldCoord.x = pixelCoordX / scale;
     worldCoord.y = pixelCoordY / scale;
-    return lagamap.getProjection().fromPointToLatLng(worldCoord);
+    return gLagamap.getProjection().fromPointToLatLng(worldCoord);
 }
 
 function onPlaceSenseWindowSave() {
-    // TODO same as cancel for now
-    onPlaceSenseWindowCancel();
+    var placeSenseData = getPlaceSenseData();
+    console.log("placeSenseData: " + JSON.stringify(placeSenseData));
+    $.post("/place-sense", placeSenseData).fail(function() {
+        console.error("Unable to save place sense for current place: " + placeSenseData.place.name)
+    });
+    closePlaceSenseWindow();
+    clearCurrentMarker();
+}
+
+function getPlaceSenseData() {
+    var placeSense = getSelectedPlaceSense();
+    return { place: gPlace, placeSense: placeSense };
+}
+
+function getSelectedPlaceSense() {
+    for (var i = 0; i < PLACE_SENSE_IDS.length; i++) {
+        var placeSenseId = PLACE_SENSE_IDS[i];
+        var placeSenseElem = $("#" + placeSenseId);
+        if (placeSenseElem.is(":checked")) {
+            var placeSense = placeSenseId;
+        }
+    }
+    return placeSense;
 }
 
 function onPlaceSenseWindowCancel() {
-    closePlaceSenseWindow();
+    closePlaceSenseWindowAndRemoveMarker();
 }
 
 $(document).ready(function() {
