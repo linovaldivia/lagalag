@@ -22,7 +22,9 @@ public class ControllerTests {
       throws Exception {
         mvc.perform(MockMvcRequestBuilders.get("/"))
            .andExpect(MockMvcResultMatchers.status().isOk())
-           .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.TEXT_HTML));
+           .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
+           .andExpect(MockMvcResultMatchers.model().attributeExists("bootstrapVersion"))
+           .andExpect(MockMvcResultMatchers.model().attributeExists("jqueryVersion"));
     }
     
     @Test
