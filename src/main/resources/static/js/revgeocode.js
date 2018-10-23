@@ -15,13 +15,13 @@ function RevGeocodeLookupService() {
     /**
      * Given a location (specified by latitude and longitude), return the name(s) of place(s) at or near that location.
      */ 
-    this.getPlaceNamesAtLocation = function(lat, lon, callback) {
+    this.getPlaceAtLocation = function(lat, lon, callback) {
         var lookupUrl = getLookupUrl(lat, lon);
         // console.log(lookupUrl);
         $.get(lookupUrl, function(data) {
             // console.info(data);
-            var placeName = getPlaceName(data);
-            callback(placeName);
+            var placeInfo = getPlaceInfo(data);
+            callback(placeInfo);
         });
     }
     
@@ -34,19 +34,24 @@ function RevGeocodeLookupService() {
                PARAM_ADDR_DETAILS;
     }
         
-    function getPlaceName(data) {
+    function getPlaceInfo(data) {
+        var placeInfo = {};
         if (data && data.address) {
+            if (data.address.country_code) {
+                placeInfo.countryCode = data.address.country_code.toUpperCase();
+            }
             if (data.address.city) {
-                return data.address.city;
+                placeInfo.name = data.address.city;
             } else if (data.address.town) {
-                return data.address.town;
+                placeInfo.name = data.address.town;
             } else if (data.address.village) {
-                return data.address.village;
+                placeInfo.name = data.address.village;
             } else {
                 // The place name could be under a different property name (e.g. "hamlet"?)
                 console.log(data.address);
             }
         }
+        return placeInfo;
     }
         
 }

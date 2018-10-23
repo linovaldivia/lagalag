@@ -54,14 +54,14 @@ function onMapClick(e) {
     closePlaceSenseWindowAndRemoveMarker();
     
     // Attempt to find nearest city(ies) to the click point.
-    gRevGeocodeLookup.getPlaceNamesAtLocation(e.latLng.lat(), e.latLng.lng(), function(placeName) {
+    gRevGeocodeLookup.getPlaceAtLocation(e.latLng.lat(), e.latLng.lng(), function(placeInfo) {
         // Place a marker only if we have a named place in the map.
-        if (placeName) {
-            storeCurrentPlace(e.latLng, placeName);
-            var marker = createMarker(e.latLng, placeName);
+        if (placeInfo.name) {
+            storeCurrentPlace(e.latLng, placeInfo);
+            var marker = createMarker(e.latLng, placeInfo.name);
             // Render the place sense window after the marker has been drawn for a smoother effect (at least in Chrome).
             window.setTimeout(function() {
-                showPlaceSenseWindow(e.latLng, placeName, marker);
+                showPlaceSenseWindow(e.latLng, placeInfo.name, marker);
             }, 100);
         } else {
             showPlaceSenseWindow(e.latLng);
@@ -69,8 +69,8 @@ function onMapClick(e) {
     });
 }
 
-function storeCurrentPlace(latLng, placeName) {
-    gPlace = { name: placeName, lat: latLng.lat(), lng: latLng.lng() };
+function storeCurrentPlace(latLng, placeInfo) {
+    gPlace = { name: placeInfo.name, countryCode: placeInfo.countryCode, lat: latLng.lat(), lng: latLng.lng() };
 }
 
 function showPlaceSenseWindow(latLng, placeName, marker) {
