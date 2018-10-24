@@ -17,48 +17,61 @@ const PLACE_SENSE_IDS    = [ PS_YES_LOVED_IT_ID, PS_YES_MEH_ID, PS_YES_HATED_IT_
 function onMapClick(e) {
     closePlaceSenseWindowAndRemoveMarker();
     
-    // Attempt to find nearest city(ies) to the click point.
-    gRevGeocodeLookup.getPlaceAtLocation(e.latLng.lat(), e.latLng.lng(), function(placeInfo) {
-        // Place a marker only if we have a named place in the map.
-        if (placeInfo.name) {
-            storeCurrentPlace(e.latLng, placeInfo);
-            var marker = createMarker(e.latLng, placeInfo.name);
-            // Render the place sense window after the marker has been drawn for a smoother effect (at least in Chrome).
-            window.setTimeout(function() {
-                showPlaceSenseWindow(e.latLng, placeInfo.name, marker);
-            }, 100);
-        } else {
-            showPlaceSenseWindow(e.latLng);
-        }
-    });
+    // Attempt to find nearest place to the click point.
+    gRevGeocodeLookup.getPlaceAtLocation(e.latLng.lat(), e.latLng.lng(), onSuccessfulPlaceLookup);
+}
+
+function onSuccessfulPlaceLookup(placeInfo) {
+    var latLng = {lat: placeInfo.lat, lng: placeInfo.lng};
+    if (placeInfo.name) {
+        showPlaceSenseWindowWithInfo(latLng, placeInfo);
+    } else {
+        showPlaceSenseWindow(latLng);
+    }
+}
+
+function showPlaceSenseWindowWithInfo(latLng, placeInfo) {
+    storeCurrentPlace(latLng, placeInfo);
+    var marker = createMarker(latLng, placeInfo.name);
+    // Render the place sense window after the marker has been drawn for a smoother effect (at least in Chrome).
+    window.setTimeout(function() {
+        showPlaceSenseWindow(latLng, placeInfo.name, marker);
+    }, 100);
 }
 
 function storeCurrentPlace(latLng, placeInfo) {
-    gPlace = { name: placeInfo.name, countryCode: placeInfo.countryCode, lat: latLng.lat(), lng: latLng.lng() };
+    gPlace = { name: placeInfo.name, countryCode: placeInfo.countryCode, lat: latLng.lat, lng: latLng.lng };
 }
 
 function showPlaceSenseWindow(latLng, placeName, marker) {
+    createPlaceSenseWindowIfAbsent();
+    configurePlaceSenseWindow(latLng, placeName, marker);
+    setCurrentMarker(marker);
+    openPlaceSenseWindow(marker);
+}
+
+function createPlaceSenseWindowIfAbsent() {
     if (gPlaceSenseWindow == null) {
         gPlaceSenseWindow = new google.maps.InfoWindow({
             disableAutoPan: true,
         });
         gPlaceSenseWindow.addListener("closeclick", onPlaceSenseWindowCancel);
-        gPlaceSenseWindow.addListener("domready", function() {
-            $("#lagalag-place-sense-save").click(onPlaceSenseWindowSave);
-            $("#lagalag-place-sense-cancel").click(onPlaceSenseWindowCancel);
-            recenterMapOnPlaceSenseWindow();
-        });
+        gPlaceSenseWindow.addListener("domready", onPlaceSenseWindowReady);
     } 
-    
+}
+
+function onPlaceSenseWindowReady() {
+    $("#lagalag-place-sense-save").click(onPlaceSenseWindowSave);
+    $("#lagalag-place-sense-cancel").click(onPlaceSenseWindowCancel);
+    recenterMapOnPlaceSenseWindow();
+}
+
+function configurePlaceSenseWindow(latLng, placeName, marker) {
     var content = generatePlaceSenseWindowContent(latLng, placeName);
     gPlaceSenseWindow.setContent(content);
     if (!marker) {
         gPlaceSenseWindow.setPosition(latLng);
     }
-
-    setCurrentMarker(marker);
-    openInfoWindowInMap(gPlaceSenseWindow, marker);
-    gPlaceSenseWindow.isOpen = true;
 }
 
 function generatePlaceSenseWindowContent(latLng, placeName) {
@@ -84,6 +97,11 @@ function removeCurrentMarkerFromMap() {
         gCurrentMarker.setMap(null);
     }
     clearCurrentMarker();
+}
+
+function openPlaceSenseWindow(marker) {
+    openInfoWindowInMap(gPlaceSenseWindow, marker);
+    gPlaceSenseWindow.isOpen = true;
 }
 
 function closePlaceSenseWindow() {

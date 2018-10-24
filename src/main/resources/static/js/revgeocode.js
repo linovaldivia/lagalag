@@ -15,27 +15,27 @@ function RevGeocodeLookupService() {
     /**
      * Given a location (specified by latitude and longitude), return the name(s) of place(s) at or near that location.
      */ 
-    this.getPlaceAtLocation = function(lat, lon, callback) {
-        var lookupUrl = getLookupUrl(lat, lon);
+    this.getPlaceAtLocation = function(lat, lng, callback) {
+        var lookupUrl = getLookupUrl(lat, lng);
         // console.log(lookupUrl);
         $.get(lookupUrl, function(data) {
             // console.info(data);
-            var placeInfo = getPlaceInfo(data);
+            var placeInfo = getPlaceInfo(lat, lng, data);
             callback(placeInfo);
         });
     }
     
-    function getLookupUrl(lat, lon) {
+    function getLookupUrl(lat, lng) {
         return BASE_SERVICE_URL + "?" + 
                PARAM_FORMAT + "&" +
                PARAM_LAT + lat + "&" + 
-               PARAM_LON + lon + "&" +
+               PARAM_LON + lng + "&" +
                PARAM_ZOOM + "&" +
                PARAM_ADDR_DETAILS;
     }
         
-    function getPlaceInfo(data) {
-        var placeInfo = {};
+    function getPlaceInfo(lat, lng, data) {
+        var placeInfo = { lat: lat, lng: lng };
         if (data && data.address) {
             if (data.address.country_code) {
                 placeInfo.countryCode = data.address.country_code.toUpperCase();
