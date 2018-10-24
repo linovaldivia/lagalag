@@ -1,9 +1,8 @@
 /**
  * Functions related to the display and handling of the "place sense" window.
- * Requires jquery, revgeocode, lagamap to be loaded first in the containing document.
+ * Requires jquery, revgeocode, lagamap, placesense-marker to be loaded first in the containing document.
  */
 var gPlaceSenseWindow = null;
-var gCurrentMarker = null;
 var gPlace = null;
 var gRevGeocodeLookup = new RevGeocodeLookupService();
 
@@ -84,21 +83,6 @@ function generatePlaceSenseWindowContent(latLng, placeName) {
     return content;
 }
 
-function setCurrentMarker(marker) {
-    gCurrentMarker = marker;
-}
-
-function clearCurrentMarker() {
-    gCurrentMarker = null;
-}
-
-function removeCurrentMarkerFromMap() {
-    if (gCurrentMarker) {
-        gCurrentMarker.setMap(null);
-    }
-    clearCurrentMarker();
-}
-
 function openPlaceSenseWindow(marker) {
     openInfoWindowInMap(gPlaceSenseWindow, marker);
     gPlaceSenseWindow.isOpen = true;
@@ -137,9 +121,9 @@ function recenterMapOnPlaceSenseWindow() {
 
 function onPlaceSenseWindowSave() {
     var placeSenseData = getPlaceSenseData();
-    console.log("placeSenseData: " + JSON.stringify(placeSenseData));
-    $.post("/place-sense", placeSenseData).fail(function() {
-        console.error("Unable to save place sense for current place: " + placeSenseData.place.name)
+    console.log("Saving placeSenseData: " + JSON.stringify(placeSenseData));
+    postJSON("/place-sense", placeSenseData).fail(function() {
+        console.error("Unable to save place sense for current place: " + placeSenseData.placeName)
     });
     closePlaceSenseWindow();
     clearCurrentMarker();
@@ -147,7 +131,14 @@ function onPlaceSenseWindowSave() {
 
 function getPlaceSenseData() {
     var placeSense = getSelectedPlaceSense();
-    return { place: gPlace, placeSense: placeSense };
+    var placeSenseData = { 
+        placeName: gPlace.name, 
+        countryCode: gPlace.countryCode, 
+        lat: gPlace.lat, 
+        lng: gPlace.lng, 
+        placeSense: placeSense 
+    }
+    return placeSenseData;
 }
 
 function getSelectedPlaceSense() {
