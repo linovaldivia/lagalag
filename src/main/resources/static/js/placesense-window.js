@@ -4,6 +4,7 @@
  */
 function PlaceSenseWindow(lagamap, onSaveCallback, onCancelCallback) {
     var mWindow = null;
+    var mCurrentPlaceSenseId = null;
     var self = this;
 
     const PS_YES_LOVED_IT_ID = "yes-love";
@@ -13,9 +14,10 @@ function PlaceSenseWindow(lagamap, onSaveCallback, onCancelCallback) {
     const PS_NOT_INTERESTED  = "not-interested";
     const PLACE_SENSE_IDS    = [ PS_YES_LOVED_IT_ID, PS_YES_MEH_ID, PS_YES_HATED_IT_ID, PS_NO_WANNA_GO, PS_NOT_INTERESTED ];
 
-    this.open = function(latLng, placeName, marker) {
+    this.open = function(latLng, placeName, marker, placeSenseId) {
         createWindowIfAbsent();
         configureWindow(latLng, placeName, marker);
+        mCurrentPlaceSenseId = placeSenseId;
         openWindow(marker);
     }
     
@@ -39,6 +41,10 @@ function PlaceSenseWindow(lagamap, onSaveCallback, onCancelCallback) {
     function onWindowReady() {
         $("#lagalag-place-sense-save").click(onSaveButtonPressed);
         $("#lagalag-place-sense-cancel").click(onCancelCallback);
+        if (mCurrentPlaceSenseId) {
+            var placeSenseElem = $("#" + mCurrentPlaceSenseId);
+            placeSenseElem.prop("checked", true);
+        }
         self.recenterMapOnWindow();
     }
     

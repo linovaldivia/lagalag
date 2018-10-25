@@ -9,3 +9,8 @@ function PlaceAndSense(place, placeSense) {
     this.place = place;
     this.placeSense = placeSense;
 }
+
+function LatLng(lat, lng) {
+    this.lat = lat;
+    this.lng = lng;
+}
