@@ -51,7 +51,6 @@ function Lagamap(mapContainerId) {
     }
     
     // Unfortunately direct access to this field is needed by other objects, forcing us to break encapsulation...
-    // TODO find a way to remove this?
     this.getGoogleMap = function() {
         return mGoogMap;
     }

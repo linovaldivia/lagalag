@@ -83,7 +83,9 @@ function closePlaceSenseWindow() {
 }
 
 function onZoomChanged() {
-    gPlaceSenseWindow.recenterMapOnWindow();
+    if (gPlaceSenseWindow.isOpen()) {
+        gPlaceSenseWindow.recenterMapOnWindow();
+    }
 }
 
 $(document).ready(function() {

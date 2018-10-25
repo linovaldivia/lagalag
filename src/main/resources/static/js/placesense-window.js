@@ -25,7 +25,7 @@ function PlaceSenseWindow(lagamap, onSaveCallback, onCancelCallback) {
             mWindow.isOpen = false;
         }
     }
-
+    
     function createWindowIfAbsent() {
         if (mWindow == null) {
             mWindow = new google.maps.InfoWindow({
@@ -50,7 +50,6 @@ function PlaceSenseWindow(lagamap, onSaveCallback, onCancelCallback) {
         }
     }
     
-    // TODO consider refactoring this so that it's a lagamap function (since it affects the map, not the window)
     this.recenterMapOnWindow = function() {
         var center = mWindow.getPosition();
         if (mWindow.anchor && mWindow.anchor.anchorPoint) {
@@ -92,5 +91,9 @@ function PlaceSenseWindow(lagamap, onSaveCallback, onCancelCallback) {
             }
         }
         return placeSense;
+    }
+    
+    this.isOpen = function() {
+        return ((mWindow != null) && mWindow.isOpen);
     }
 }
