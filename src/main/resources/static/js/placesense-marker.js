@@ -1,20 +1,37 @@
 /**
  * Functions related to the display and handling of the "place sense" markers.
  */
-var gCurrentMarker = null;
-
-function setCurrentMarker(marker) {
-    gCurrentMarker = marker;
-}
-
-function clearCurrentMarker() {
-    gCurrentMarker = null;
-}
-
-function removeCurrentMarkerFromMap() {
-    if (gCurrentMarker) {
-        gCurrentMarker.setMap(null);
+function PlaceSenseMarkerManager(lagamap) {
+    var gCurrentMarker = null;
+    
+    this.createMarker = function(latLng, title) {
+        var map = lagamap.getGoogleMap();
+        var marker = new google.maps.Marker({
+            position: latLng,
+            map: map,
+            title: title
+          });
+        return marker;
     }
-    clearCurrentMarker();
+    
+    this.setCurrentMarker = function(marker) {
+        gCurrentMarker = marker;
+    }
+    
+    this.getCurrentMarker = function() {
+        return gCurrentMarker;
+    }
+
+    this.clearCurrentMarker = function() {
+        gCurrentMarker = null;
+    }
+
+    this.removeCurrentMarkerFromMap = function() {
+        if (gCurrentMarker) {
+            gCurrentMarker.setMap(null);
+        }
+        this.clearCurrentMarker();
+    }
 }
+
 
