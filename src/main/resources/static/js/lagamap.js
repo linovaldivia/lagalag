@@ -19,6 +19,9 @@ function Lagamap(mapContainerId) {
             streetViewControl: false,
             mapTypeControl: false,
             fullscreenControl: false,
+            clickableIcons: false,
+            draggableCursor: "pointer",
+            draggingCursor: "grabbing",
             styles: INITIAL_MAP_STYLES
     };
 
