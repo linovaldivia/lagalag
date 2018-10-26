@@ -44,17 +44,19 @@ html, body {
     width: 235px;
 }
 
-/* "Fancy checkbox" css c/o this guy: https://codingwithspike.wordpress.com/2014/11/16/fancy-css-checkboxes-with-fontawesome/ */
-.fancy-checkbox {
+
+/* "Fancy radio" css c/o this guy (who used checkboxes but same concepts apply): 
+   https://codingwithspike.wordpress.com/2014/11/16/fancy-css-checkboxes-with-fontawesome/ */
+.fancy-radio {
     margin-bottom: .3em;
 }
 
-.fancy-checkbox input[type="checkbox"] {
+.fancy-radio input[type="radio"] {
     display: none;
 }
 
-.fancy-checkbox span {
-	font-size: 16px;
+.fancy-radio span {
+    font-size: 16px;
     cursor: pointer;
     font-weight: 200;
     -webkit-user-select: none;
@@ -63,12 +65,12 @@ html, body {
     user-select: none;
 }
 
-/* Make the text bold when the user checks the corresponding checkbox */
-.fancy-checkbox input[type="checkbox"]:checked ~ span {
+/* Make the text bold when the user checks the corresponding radio */
+.fancy-radio input[type="radio"]:checked ~ span {
     font-weight: 700;
 }
 
-.fancy-checkbox span::before {
+.fancy-radio span::before {
     font-family: "Font Awesome 5 Free";
     font-style: normal;
     width: 1em;
@@ -78,48 +80,48 @@ html, body {
 }
 
 /* Use the solid version of the font by setting the font weight */
-.fancy-checkbox input[type="checkbox"]:checked ~ span::before {
-	font-weight: 900;
+.fancy-radio input[type="radio"]:checked ~ span::before {
+    font-weight: 900;
 }
 
-.fancy-checkbox input[type="checkbox"]:checked ~ span.yes-loved-it {
+.fancy-radio input[type="radio"]:checked ~ span.yes-loved-it {
     color: red;
 }
 
-.fancy-checkbox span.yes-loved-it::before {
+.fancy-radio span.yes-loved-it::before {
     content: '\f004';   /* heart */
     color: red;
 }
 
-.fancy-checkbox input[type="checkbox"]:checked ~ span.yes-meh {
+.fancy-radio input[type="radio"]:checked ~ span.yes-meh {
     color: orange;
 }
 
-.fancy-checkbox span.yes-meh::before {
+.fancy-radio span.yes-meh::before {
     content: '\f11a';    /* meh (emoji) */
     color: orange;
 }
 
-.fancy-checkbox span.yes-hated-it::before {
+.fancy-radio span.yes-hated-it::before {
     content: '\f165';   /* thumbs-down */
 }
 
-.fancy-checkbox input[type="checkbox"]:checked ~ span.no-wanna-go {
+.fancy-radio input[type="radio"]:checked ~ span.no-wanna-go {
     color: green;
 }
 
-.fancy-checkbox span.no-wanna-go::before {
+.fancy-radio span.no-wanna-go::before {
     content: '\f02e';   /* bookmark */
     color: green;
     margin-left: .1em;
     margin-right: .8em;
 }
 
-.fancy-checkbox input[type="checkbox"]:checked ~ span.not-interested {
+.fancy-radio input[type="radio"]:checked ~ span.not-interested {
     color: red;
 }
 
-.fancy-checkbox span.not-interested::before {
+.fancy-radio span.not-interested::before {
     content: '\f057';   /* times circle (x) */
     color: red;
 }
