@@ -1,19 +1,13 @@
 /**
  * Functions related to the display and handling of the "place sense" window.
- * Requires jquery, lagamap, placesense-marker to be loaded first in the containing document.
+ * Requires jquery, lagamap, placesense, placesense-marker to be loaded first in the containing document.
  */
 function PlaceSenseWindow(lagamap, onSaveCallback, onCancelCallback) {
     var mWindow = null;
     var mSelectedPlaceSenseId = null;
     var self = this;
 
-    const PS_YES_LOVED_IT_ID = "yes-love";
-    const PS_YES_MEH_ID      = "yes-meh";
-    const PS_YES_HATED_IT_ID = "yes-hate";
-    const PS_NO_WANNA_GO     = "no-wanna-go";
-    const PS_NOT_INTERESTED  = "not-interested";
-    const PLACE_SENSE_IDS    = [ PS_YES_LOVED_IT_ID, PS_YES_MEH_ID, PS_YES_HATED_IT_ID, PS_NO_WANNA_GO, PS_NOT_INTERESTED ];
-    const PS_DEFAULT         = PS_YES_LOVED_IT_ID;
+    const PS_DEFAULT = PlaceSense.YES_LOVED_IT_ID;
 
     this.open = function(latLng, placeName, marker, selectedPlaceSenseId) {
         createWindowIfAbsent();
@@ -93,13 +87,14 @@ function PlaceSenseWindow(lagamap, onSaveCallback, onCancelCallback) {
     }
     
     function getSelectedPlaceSense() {
-        for (var i = 0; i < PLACE_SENSE_IDS.length; i++) {
-            var placeSenseId = PLACE_SENSE_IDS[i];
+        var placeSense = null;
+        $.each(PlaceSense, function(key, value) {
+            var placeSenseId = value;
             var placeSenseElem = $("#" + placeSenseId);
             if (placeSenseElem.is(":checked")) {
-                var placeSense = placeSenseId;
+                placeSense = placeSenseId;
             }
-        }
+        });
         return placeSense;
     }
     

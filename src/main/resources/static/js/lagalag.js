@@ -67,7 +67,7 @@ function onPlaceSenseWindowSave(selectedPlaceSense) {
 
 function configureCurrentMarkerOnSave(placeAndSense) {
     var marker = gMarkerManager.getCurrentMarker();
-    marker.placeAndSense = placeAndSense;
+    gMarkerManager.setMarkerPlaceAndSense(marker, placeAndSense);
     addOnClickListenerOnce(marker);
     gMarkerManager.clearCurrentMarker();
 }
@@ -94,7 +94,7 @@ function setCurrentPlace(place) {
 function closePlaceSenseWindowAndRemoveTempMarker() {
     closePlaceSenseWindow();
     var curMarker = gMarkerManager.getCurrentMarker();
-    if (curMarker && !curMarker.placeAndSense) {
+    if (curMarker && gMarkerManager.isMarkerTemporary(curMarker)) {
         gMarkerManager.removeCurrentMarkerFromMap();
     }
 }
@@ -113,7 +113,7 @@ function onMarkerClick(marker) {
     closePlaceSenseWindowAndRemoveTempMarker();
     
     gMarkerManager.setCurrentMarker(marker);
-    var placeAndSense = marker.placeAndSense;
+    var placeAndSense = gMarkerManager.getMarkerPlaceAndSense(marker);
     setCurrentPlace(placeAndSense.place);
     
     var latLng = new LatLng(placeAndSense.place.lat, placeAndSense.place.lng);
