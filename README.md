@@ -1,8 +1,8 @@
 # lagalag: the web app (Spring Boot, Bootstrap, Google Maps)
 
-![screenshot](/screenshots/mult-cities-marked.png)
+![screenshot](/screenshots/mult-cities-marked-color.png)
 
-_Screenshot (as of Oct 25 2018): when a user clicks on the map, a marker and a popup showing the name of the closest city/town appears. Users can then give their opinion (or Sense) about a place._
+_Screenshot (as of Oct 27 2018): when a user clicks on the map, a marker and a popup showing the name of the closest city/town appears. Users can then give their opinion (or Sense) about a place. The colors of the markers correspond to the user's sentiment about a place._
 
 This project demonstrates the use of several popular web technologies to create a functional web application.
 
@@ -29,4 +29,4 @@ or from the jar file once it's created:
 
 and then pointing your browser to `<server-host>:8080`:
 
-![screenshot](/screenshots/mainscreen.png)
+![screenshot](/screenshots/colorful-world.png)
