@@ -5,12 +5,13 @@
 function RevGeocodeLookupService() {
     // Using the awesome (and free!) Nominatim reverse geocoding API 
     // (see https://wiki.openstreetmap.org/wiki/Nominatim#Reverse_Geocoding)
-    var BASE_SERVICE_URL = "https://nominatim.openstreetmap.org/reverse";
-    var PARAM_FORMAT = "format=json";
-    var PARAM_LAT= "lat=";
-    var PARAM_LON= "lon=";
-    var PARAM_ZOOM = "zoom=16";
-    var PARAM_ADDR_DETAILS = "addressdetails=1";
+    const BASE_SERVICE_URL = "https://nominatim.openstreetmap.org/reverse";
+    const PARAM_FORMAT = "format=json";
+    const PARAM_LAT= "lat=";
+    const PARAM_LON= "lon=";
+    const PARAM_ZOOM = "zoom=16";
+    const PARAM_ADDR_DETAILS = "addressdetails=1";
+    const PLACE_PROPERTIES_ORDER = ["city", "town", "village", "state", "region"];
     
     /**
      * Given a location (specified by latitude and longitude), return the name(s) of place(s) at or near that location.
@@ -40,18 +41,20 @@ function RevGeocodeLookupService() {
             if (data.address.country_code) {
                 placeInfo.countryCode = data.address.country_code.toUpperCase();
             }
-            if (data.address.city) {
-                placeInfo.name = data.address.city;
-            } else if (data.address.town) {
-                placeInfo.name = data.address.town;
-            } else if (data.address.village) {
-                placeInfo.name = data.address.village;
-            } else {
-                // The place name could be under a different property name (e.g. "hamlet"?)
-                console.log(data.address);
-            }
+            placeInfo.name = getPlaceName(data.address);
         }
         return placeInfo;
+    }
+    
+    function getPlaceName(address) {
+        for (var i = 0; i < PLACE_PROPERTIES_ORDER.length; i++) {
+            var placeProp = PLACE_PROPERTIES_ORDER[i];
+            if (address[placeProp]) {
+                return address[placeProp];
+            }
+        }
+        // The place name could be under a different property name (e.g. "hamlet"?)
+        console.log(address);
     }
         
 }
