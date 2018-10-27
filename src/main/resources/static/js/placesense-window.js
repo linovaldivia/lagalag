@@ -3,7 +3,7 @@
  * Requires jquery, lagamap, placesense, placesense-marker to be loaded first in the containing document.
  */
 function PlaceSenseWindow(lagamap, onSaveCallback, onCancelCallback) {
-    var mWindow = null;
+    var mGoogWindow = null;
     var mSelectedPlaceSenseId = null;
     var self = this;
 
@@ -17,19 +17,19 @@ function PlaceSenseWindow(lagamap, onSaveCallback, onCancelCallback) {
     }
     
     this.close = function() {
-        if (mWindow != null) {
-            mWindow.close();
-            mWindow.isOpen = false;
+        if (mGoogWindow != null) {
+            mGoogWindow.close();
+            mGoogWindow.isOpen = false;
         }
     }
     
     function createWindowIfAbsent() {
-        if (mWindow == null) {
-            mWindow = new google.maps.InfoWindow({
+        if (mGoogWindow == null) {
+            mGoogWindow = new google.maps.InfoWindow({
                 disableAutoPan: true,
             });
-            mWindow.addListener("closeclick", onCancelCallback);
-            mWindow.addListener("domready", onWindowReady);
+            mGoogWindow.addListener("closeclick", onCancelCallback);
+            mGoogWindow.addListener("domready", onWindowReady);
         } 
     }
 
@@ -42,19 +42,19 @@ function PlaceSenseWindow(lagamap, onSaveCallback, onCancelCallback) {
     
     function configureWindow(latLng, placeName, marker) {
         var content = generateWindowContent(latLng, placeName);
-        mWindow.setContent(content);
+        mGoogWindow.setContent(content);
         if (!marker) {
-            mWindow.setPosition(latLng);
+            mGoogWindow.setPosition(latLng);
         }
     }
     
     this.recenterMapOnWindow = function() {
-        var center = mWindow.getPosition();
-        if (mWindow.anchor && mWindow.anchor.anchorPoint) {
+        var center = mGoogWindow.getPosition();
+        if (mGoogWindow.anchor && mGoogWindow.anchor.anchorPoint) {
             // Recompute the map center based on the window's anchor point.
             center = lagamap.offsetLatLngBy(center, 
-                                            mWindow.anchor.anchorPoint.x, 
-                                            mWindow.anchor.anchorPoint.y);
+                                            mGoogWindow.anchor.anchorPoint.x, 
+                                            mGoogWindow.anchor.anchorPoint.y);
         }
         lagamap.centerMapOn(center);
     }
@@ -71,8 +71,11 @@ function PlaceSenseWindow(lagamap, onSaveCallback, onCancelCallback) {
     
     function openWindow(marker) {
         var map = lagamap.getGoogleMap();
-        mWindow.open(map, marker);
-        mWindow.isOpen = true;
+        if (marker) {
+            var googleMarker = marker.getGoogleMarker(); 
+        }
+        mGoogWindow.open(map, googleMarker);
+        mGoogWindow.isOpen = true;
     }
     
     function onSaveButtonPressed() {
@@ -99,6 +102,6 @@ function PlaceSenseWindow(lagamap, onSaveCallback, onCancelCallback) {
     }
     
     this.isOpen = function() {
-        return ((mWindow != null) && mWindow.isOpen);
+        return ((mGoogWindow != null) && mGoogWindow.isOpen);
     }
 }

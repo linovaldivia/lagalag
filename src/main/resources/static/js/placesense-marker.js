@@ -1,10 +1,8 @@
 /**
- * Functions related to the display and handling of the "place sense" markers.
+ * Functions related to the display and handling of the map markers.
  * Requires placesense to be loaded first in the containing document.
  */
-function PlaceSenseMarkerManager(lagamap) {
-    var gCurrentMarker = null;
-    
+function PlaceSenseMarker(lagamap, latLng, title) {
     var MARKER_URLS = {};
     MARKER_URLS[PlaceSense.YES_LOVED_IT_ID]   = "http://maps.google.com/mapfiles/ms/micons/red-dot.png";
     MARKER_URLS[PlaceSense.YES_MEH_ID]        = "http://maps.google.com/mapfiles/ms/micons/yellow-dot.png";
@@ -13,51 +11,46 @@ function PlaceSenseMarkerManager(lagamap) {
     MARKER_URLS[PlaceSense.NOT_INTERESTED_ID] = "http://maps.google.com/mapfiles/ms/micons/blue-dot.png";
     const MARKER_URL_UNKNOWN                  = "http://maps.google.com/mapfiles/ms/micons/ltblue-dot.png";
     
-    this.createMarker = function(latLng, title) {
-        var map = lagamap.getGoogleMap();
-        var marker = new google.maps.Marker({
-            position: latLng,
-            map: map,
-            title: title,
-            icon: {
-                url: MARKER_URL_UNKNOWN
-            }
-        });
-        return marker;
-    }
-    
-    this.setMarkerPlaceAndSense = function(marker, placeAndSense) {
-        marker.placeAndSense = placeAndSense;
-        var markerUrl = MARKER_URLS[placeAndSense.placeSense];
-        marker.setIcon(markerUrl);
-    }
-    
-    this.getMarkerPlaceAndSense = function(marker) {
-        return marker.placeAndSense;
-    }
-
-    this.isMarkerTemporary = function(marker) {
-        return (!marker.placeAndSense);
-    }
-    
-    this.setCurrentMarker = function(marker) {
-        gCurrentMarker = marker;
-    }
-    
-    this.getCurrentMarker = function() {
-        return gCurrentMarker;
-    }
-
-    this.clearCurrentMarker = function() {
-        gCurrentMarker = null;
-    }
-
-    this.removeCurrentMarkerFromMap = function() {
-        if (gCurrentMarker) {
-            gCurrentMarker.setMap(null);
+    var mGoogMarker = new google.maps.Marker({
+        position: latLng,
+        map: lagamap.getGoogleMap(),
+        title: title,
+        icon: {
+            url: MARKER_URL_UNKNOWN
         }
-        this.clearCurrentMarker();
+    });
+    var mPlaceAndSense = null;
+    var mHasClickHandler = false;
+    
+    this.setPlaceAndSense = function(placeAndSense) {
+        mPlaceAndSense = placeAndSense;
+        var markerUrl = MARKER_URLS[placeAndSense.placeSense];
+        mGoogMarker.setIcon(markerUrl);
+    }
+    
+    this.getPlaceAndSense = function() {
+        return mPlaceAndSense;
+    }
+
+    this.isTemporary = function() {
+        return !mPlaceAndSense;
+    }
+    
+    this.removeFromMap = function() {
+        mGoogMarker.setMap(null);
+    }
+
+    this.click = function(handler) {
+        if (mHasClickHandler) {
+            return;
+        }
+        
+        var self = this;
+        mGoogMarker.addListener("click", function() { handler(self); });
+        mHasClickHandler = true;
+    }
+    
+    this.getGoogleMarker = function() {
+        return mGoogMarker;
     }
 }
-
-

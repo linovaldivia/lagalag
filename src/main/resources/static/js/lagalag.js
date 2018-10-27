@@ -4,18 +4,16 @@
 var gLagamap = null;
 var gPlaceSenseWindow = null;
 var gPlace = null;
-var gMarkerManager = null;
+var gCurrentMarker = null;
 var gRevGeocodeLookup = new RevGeocodeLookupService();
 
 function initMap() {
     gLagamap = new Lagamap("map");
     gLagamap.createMap();
-    
-    gPlaceSenseWindow = new PlaceSenseWindow(gLagamap, onPlaceSenseWindowSave, onPlaceSenseWindowCancel);
-    gMarkerManager = new PlaceSenseMarkerManager(gLagamap);
-    
     gLagamap.addListener("click", onMapClick);
     gLagamap.addListener("zoom_changed", onZoomChanged);
+    
+    gPlaceSenseWindow = new PlaceSenseWindow(gLagamap, onPlaceSenseWindowSave, onPlaceSenseWindowCancel);
 }
 
 function onMapClick(e) {
@@ -31,23 +29,17 @@ function onSuccessfulPlaceLookup(placeInfo) {
     var placeName = placeInfo.name;
     if (placeInfo.name) {
         setCurrentPlaceFromPlaceInfo(latLng, placeInfo);
-        var curMarker = createAndSetCurrentMarker(latLng, placeName);
-        showPlaceSenseWindowWithInfo(latLng, placeName, curMarker);
+        gCurrentMarker = new PlaceSenseMarker(gLagamap, latLng, placeName);
+        showPlaceSenseWindowWithInfo(latLng, placeName);
     } else {
         showPlaceSenseWindow(latLng);
     }
 }
 
-function createAndSetCurrentMarker(latLng, placeName) {
-    var marker = gMarkerManager.createMarker(latLng, placeName);
-    gMarkerManager.setCurrentMarker(marker);
-    return marker;
-}
-
-function showPlaceSenseWindowWithInfo(latLng, placeName, marker, placeSenseId) {
+function showPlaceSenseWindowWithInfo(latLng, placeName, placeSenseId) {
     // Render the place sense window after the marker has been drawn for a smoother effect (at least in Chrome).
     window.setTimeout(function() {
-        gPlaceSenseWindow.open(latLng, placeName, marker, placeSenseId);
+        gPlaceSenseWindow.open(latLng, placeName, gCurrentMarker, placeSenseId);
     }, 100);
 }
 
@@ -66,17 +58,9 @@ function onPlaceSenseWindowSave(selectedPlaceSense) {
 }
 
 function configureCurrentMarkerOnSave(placeAndSense) {
-    var marker = gMarkerManager.getCurrentMarker();
-    gMarkerManager.setMarkerPlaceAndSense(marker, placeAndSense);
-    addOnClickListenerOnce(marker);
-    gMarkerManager.clearCurrentMarker();
-}
-
-function addOnClickListenerOnce(marker) {
-    if (!marker.hasClickListener) {
-        marker.addListener("click", function() { onMarkerClick(marker); });
-        marker.hasClickListener = true;
-    }
+    gCurrentMarker.setPlaceAndSense(placeAndSense);
+    gCurrentMarker.click(onMarkerClick);
+    gCurrentMarker = null;
 }
 
 function onPlaceSenseWindowCancel() {
@@ -93,9 +77,8 @@ function setCurrentPlace(place) {
 
 function closePlaceSenseWindowAndRemoveTempMarker() {
     closePlaceSenseWindow();
-    var curMarker = gMarkerManager.getCurrentMarker();
-    if (curMarker && gMarkerManager.isMarkerTemporary(curMarker)) {
-        gMarkerManager.removeCurrentMarkerFromMap();
+    if (gCurrentMarker && gCurrentMarker.isTemporary()) {
+        removeCurrentMarkerFromMap();
     }
 }
 
@@ -112,15 +95,20 @@ function onZoomChanged() {
 function onMarkerClick(marker) {
     closePlaceSenseWindowAndRemoveTempMarker();
     
-    gMarkerManager.setCurrentMarker(marker);
-    var placeAndSense = gMarkerManager.getMarkerPlaceAndSense(marker);
+    gCurrentMarker = marker;
+    var placeAndSense = marker.getPlaceAndSense();
     setCurrentPlace(placeAndSense.place);
     
     var latLng = new LatLng(placeAndSense.place.lat, placeAndSense.place.lng);
     var placeName = placeAndSense.place.name;
     var placeSenseId = placeAndSense.placeSense;
-    showPlaceSenseWindowWithInfo(latLng, placeName, marker, placeSenseId);
+    showPlaceSenseWindowWithInfo(latLng, placeName, placeSenseId);
 }
+
+function removeCurrentMarkerFromMap() {
+    gCurrentMarker.removeFromMap();
+    gCurrentMarker = null;
+} 
 
 $(document).ready(function() {
     // Reserved for future ondocumentready function calls
