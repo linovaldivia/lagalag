@@ -118,10 +118,10 @@ html, body {
 }
 
 .fancy-radio input[type="radio"]:checked ~ span.not-interested {
-    color: red;
+    color: blue;
 }
 
 .fancy-radio span.not-interested::before {
     content: '\f057';   /* times circle (x) */
-    color: red;
+    color: blue;
 }
