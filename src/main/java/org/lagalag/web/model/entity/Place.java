@@ -1,17 +1,10 @@
 package org.lagalag.web.model.entity;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 
-@Getter
-@Setter
-@EqualsAndHashCode
-@ToString
+@Data
 public class Place {
     private String name;
     private String countryCode;
-    private double lat;
-    private double lng;
+    private LatLng latLng;
 }

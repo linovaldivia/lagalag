@@ -3,7 +3,7 @@
  */
 var gLagamap = null;
 var gPlaceSenseWindow = null;
-var gPlace = null;
+var gPlaceSense = null;
 var gCurrentMarker = null;
 var gRevGeocodeLookup = new RevGeocodeLookupService();
 
@@ -16,6 +16,7 @@ function initMap() {
     gPlaceSenseWindow = new PlaceSenseWindow(gLagamap, onPlaceSenseWindowSave, onPlaceSenseWindowCancel);
 }
 
+// TODO instead of passing e, pass just lat and lng (or use Lagalatlng)
 function onMapClick(e) {
     closePlaceSenseWindowAndRemoveTempMarker();
     // Attempt to find nearest place to the click point.
@@ -27,52 +28,47 @@ function onMapClick(e) {
 function onSuccessfulPlaceLookup(placeInfo) {
     var latLng = new LatLng(placeInfo.lat, placeInfo.lng);
     var placeName = placeInfo.name;
-    if (placeInfo.name) {
-        setCurrentPlaceFromPlaceInfo(latLng, placeInfo);
+    if (placeName) {
+        gPlaceSense = new PlaceSense(placeInfo, latLng);
         gCurrentMarker = new PlaceSenseMarker(gLagamap, latLng, placeName);
-        showPlaceSenseWindowWithInfo(latLng, placeName);
+        openPlaceSenseWindowWithInfo();
     } else {
-        showPlaceSenseWindow(latLng);
+        openEmptyPlaceSenseWindow(latLng);
     }
 }
 
-function showPlaceSenseWindowWithInfo(latLng, placeName, placeSenseId) {
+function openPlaceSenseWindowWithInfo() {
     // Render the place sense window after the marker has been drawn for a smoother effect (at least in Chrome).
     window.setTimeout(function() {
-        gPlaceSenseWindow.open(latLng, placeName, gCurrentMarker, placeSenseId);
+        var latLng = gPlaceSense.placeLatLng;
+        var placeName = gPlaceSense.placeName;
+        var selectedSense = gPlaceSense.sense;
+        gPlaceSenseWindow.open(latLng, placeName, gCurrentMarker, selectedSense);
     }, 100);
 }
 
-function showPlaceSenseWindow(latLng) {
+function openEmptyPlaceSenseWindow(latLng) {
     gPlaceSenseWindow.open(latLng);
 }
 
-function onPlaceSenseWindowSave(selectedPlaceSense) {
-    var placeAndSense = new PlaceAndSense(gPlace, selectedPlaceSense);
-    console.log("Saving placeAndSense: " + JSON.stringify(placeAndSense));
-    postJSON("/place-sense", placeAndSense).fail(function() {
-        console.error("Unable to save place sense for current place: " + placeAndSense.placeName)
+function onPlaceSenseWindowSave(selectedSense) {
+    gPlaceSense.sense = selectedSense;
+    console.log("Saving PlaceSense: " + JSON.stringify(gPlaceSense));
+    postJSON("/place-sense", gPlaceSense).fail(function() {
+        console.error("Unable to save PlaceSense for current place: " + gPlaceSense.placeName)
     });
-    configureCurrentMarkerOnSave(placeAndSense);
+    configureCurrentMarkerOnSave();
     closePlaceSenseWindow();
 }
 
-function configureCurrentMarkerOnSave(placeAndSense) {
-    gCurrentMarker.setPlaceAndSense(placeAndSense);
+function configureCurrentMarkerOnSave() {
+    gCurrentMarker.setPlaceSense(gPlaceSense);
     gCurrentMarker.click(onMarkerClick);
     gCurrentMarker = null;
 }
 
 function onPlaceSenseWindowCancel() {
     closePlaceSenseWindowAndRemoveTempMarker();
-}
-
-function setCurrentPlaceFromPlaceInfo(latLng, placeInfo) {
-    gPlace = new Place(placeInfo, latLng);
-}
-
-function setCurrentPlace(place) {
-    gPlace = place;
 }
 
 function closePlaceSenseWindowAndRemoveTempMarker() {
@@ -94,15 +90,9 @@ function onZoomChanged() {
 
 function onMarkerClick(marker) {
     closePlaceSenseWindowAndRemoveTempMarker();
-    
     gCurrentMarker = marker;
-    var placeAndSense = marker.getPlaceAndSense();
-    setCurrentPlace(placeAndSense.place);
-    
-    var latLng = new LatLng(placeAndSense.place.lat, placeAndSense.place.lng);
-    var placeName = placeAndSense.place.name;
-    var placeSenseId = placeAndSense.placeSense;
-    showPlaceSenseWindowWithInfo(latLng, placeName, placeSenseId);
+    gPlaceSense = marker.getPlaceSense();
+    openPlaceSenseWindowWithInfo();
 }
 
 function removeCurrentMarkerFromMap() {

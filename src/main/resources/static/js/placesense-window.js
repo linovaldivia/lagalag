@@ -1,18 +1,18 @@
 /**
  * Functions related to the display and handling of the "place sense" window.
- * Requires jquery, lagamap, placesense, placesense-marker to be loaded first in the containing document.
+ * Requires jquery, lagamap, sense, placesense-marker to be loaded first in the containing document.
  */
 function PlaceSenseWindow(lagamap, onSaveCallback, onCancelCallback) {
     var mGoogWindow = null;
-    var mSelectedPlaceSenseId = null;
+    var mSelectedSense = null;
     var self = this;
 
-    const PS_DEFAULT = PlaceSense.YES_LOVED_IT_ID;
+    const DEFAULT_SENSE = Sense.YES_LOVED_IT_ID;
 
-    this.open = function(latLng, placeName, marker, selectedPlaceSenseId) {
+    this.open = function(latLng, placeName, marker, selectedSense) {
         createWindowIfAbsent();
         configureWindow(latLng, placeName, marker);
-        mSelectedPlaceSenseId = selectedPlaceSenseId;
+        mSelectedSense = selectedSense;
         openWindow(marker);
     }
     
@@ -36,7 +36,7 @@ function PlaceSenseWindow(lagamap, onSaveCallback, onCancelCallback) {
     function onWindowReady() {
         $("#lagalag-place-sense-save").click(onSaveButtonPressed);
         $("#lagalag-place-sense-cancel").click(onCancelCallback);
-        setSelectedPlaceSense();
+        setSelectedSense();
         self.recenterMapOnWindow();
     }
     
@@ -79,26 +79,26 @@ function PlaceSenseWindow(lagamap, onSaveCallback, onCancelCallback) {
     }
     
     function onSaveButtonPressed() {
-        var selectedPlaceSense = getSelectedPlaceSense();
-        onSaveCallback(selectedPlaceSense);
+        var selectedSense = getSelectedSense();
+        onSaveCallback(selectedSense);
     }
     
-    function setSelectedPlaceSense() {
-        var selPlaceSenseId = (mSelectedPlaceSenseId ? mSelectedPlaceSenseId : PS_DEFAULT);
-        var placeSenseElem = $("#" + selPlaceSenseId);
-        placeSenseElem.prop("checked", true);
+    function setSelectedSense() {
+        var selSense = (mSelectedSense ? mSelectedSense : DEFAULT_SENSE);
+        var senseElem = $("#" + selSense);
+        senseElem.prop("checked", true);
     }
     
-    function getSelectedPlaceSense() {
-        var placeSense = null;
-        $.each(PlaceSense, function(key, value) {
-            var placeSenseId = value;
-            var placeSenseElem = $("#" + placeSenseId);
-            if (placeSenseElem.is(":checked")) {
-                placeSense = placeSenseId;
+    function getSelectedSense() {
+        var selSense = null;
+        $.each(Sense, function(key, value) {
+            var senseId = value;
+            var senseElem = $("#" + senseId);
+            if (senseElem.is(":checked")) {
+                selSense = senseId;
             }
         });
-        return placeSense;
+        return selSense;
     }
     
     this.isOpen = function() {

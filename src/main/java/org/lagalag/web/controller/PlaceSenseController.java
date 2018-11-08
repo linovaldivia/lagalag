@@ -1,7 +1,7 @@
 package org.lagalag.web.controller;
 
-import org.lagalag.web.model.entity.PlaceAndSense;
-import org.lagalag.web.model.transfer.PlaceAndSenseDTO;
+import org.lagalag.web.model.entity.PlaceSense;
+import org.lagalag.web.model.transfer.PlaceSenseDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,10 +14,10 @@ public class PlaceSenseController {
     private ModelMapper dtoToEntityMapper;
     
     @PostMapping("/place-sense")
-    public void savePlaceSense(@RequestBody PlaceAndSenseDTO placeSenseDTO) {
+    public void savePlaceSense(@RequestBody PlaceSenseDTO placeSenseDTO) {
         // TODO save to datastore
         System.out.println("*** RECEIVED: " + placeSenseDTO);
-        PlaceAndSense placeAndSense = dtoToEntityMapper.map(placeSenseDTO, PlaceAndSense.class);
-        System.out.println("Entity: " + placeAndSense);
+        PlaceSense placeSense = dtoToEntityMapper.map(placeSenseDTO, PlaceSense.class);
+        System.out.println("Entity: " + placeSense);
     }
 }
