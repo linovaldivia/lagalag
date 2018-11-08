@@ -1,6 +1,6 @@
 /**
  * Functions related to the creation and styling of the map itself.
- * Requires jquery to be loaded first in the containing document.
+ * Requires jquery, placesense to be loaded first in the containing document.
  */
 function Lagamap(mapContainerId) {
     var mGoogMap = null;
@@ -33,8 +33,17 @@ function Lagamap(mapContainerId) {
         console.log("Map created!");
     }
     
-    this.addListener = function(eventName, eventHandler) {
-        mGoogMap.addListener(eventName, eventHandler);
+    this.onClick = function(handler) {
+        mGoogMap.addListener("click", function(e) {
+            var lat = e.latLng.lat();
+            var lng = e.latLng.lng();
+            var latLng = new LagalatLng(lat, lng);
+            handler(latLng);
+        });
+    }
+    
+    this.onZoomChanged = function(handler) {
+        mGoogMap.addListener("zoom_changed", handler);
     }
 
     this.centerMapOn = function(centerLatLng) {

@@ -40,7 +40,7 @@ function PlaceSenseMarker(lagamap, latLng, title) {
         mGoogMarker.setMap(null);
     }
 
-    this.click = function(handler) {
+    this.onClick = function(handler) {
         if (mHasClickHandler) {
             return;
         }

@@ -4,3 +4,8 @@ function PlaceSense(placeInfo, latLng, sense) {
     this.placeLatLng = latLng;
     this.sense = sense;
 }
+
+function LagalatLng(lat, lng) {
+    this.lat = lat;
+    this.lng = lng;
+}

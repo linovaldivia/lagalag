@@ -10,23 +10,19 @@ var gRevGeocodeLookup = new RevGeocodeLookupService();
 function initMap() {
     gLagamap = new Lagamap("map");
     gLagamap.createMap();
-    gLagamap.addListener("click", onMapClick);
-    gLagamap.addListener("zoom_changed", onZoomChanged);
+    gLagamap.onClick(onMapClick);
+    gLagamap.onZoomChanged(onZoomChanged);
     
     gPlaceSenseWindow = new PlaceSenseWindow(gLagamap, onPlaceSenseWindowSave, onPlaceSenseWindowCancel);
 }
 
-// TODO instead of passing e, pass just lat and lng (or use Lagalatlng)
-function onMapClick(e) {
+function onMapClick(latLng) {
     closePlaceSenseWindowAndRemoveTempMarker();
-    // Attempt to find nearest place to the click point.
-    var lat = e.latLng.lat();
-    var lng = e.latLng.lng();
-    gRevGeocodeLookup.getPlaceAtLocation(lat, lng, onSuccessfulPlaceLookup);
+    gRevGeocodeLookup.getPlaceAtLocation(latLng.lat, latLng.lng, onSuccessfulPlaceLookup);
 }
 
 function onSuccessfulPlaceLookup(placeInfo) {
-    var latLng = new LatLng(placeInfo.lat, placeInfo.lng);
+    var latLng = new LagalatLng(placeInfo.lat, placeInfo.lng);
     var placeName = placeInfo.name;
     if (placeName) {
         gPlaceSense = new PlaceSense(placeInfo, latLng);
@@ -63,7 +59,7 @@ function onPlaceSenseWindowSave(selectedSense) {
 
 function configureCurrentMarkerOnSave() {
     gCurrentMarker.setPlaceSense(gPlaceSense);
-    gCurrentMarker.click(onMarkerClick);
+    gCurrentMarker.onClick(onMarkerClick);
     gCurrentMarker = null;
 }
 
