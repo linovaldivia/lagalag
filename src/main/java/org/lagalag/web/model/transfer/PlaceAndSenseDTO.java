@@ -1,4 +1,4 @@
-package org.lagalag.web.data;
+package org.lagalag.web.model.transfer;
 
 /**
  * DTO for "Place Sense" data (place info + user's sense of a place).
@@ -11,6 +11,6 @@ public class PlaceAndSenseDTO {
     
     @Override
     public String toString() {
-        return "[place=" + place + ", placeSense=" + placeSense + "]";
+        return "PlaceAndSenseDTO [place=" + place + ", placeSense=" + placeSense + "]";
     }
 }

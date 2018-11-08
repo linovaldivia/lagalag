@@ -1,4 +1,4 @@
-package org.lagalag.web.data;
+package org.lagalag.web.model.transfer;
 
 /**
  * DTO for Place data.
