@@ -33,8 +33,8 @@ public class PlaceSenseServiceImpl implements PlaceSenseService {
     }
 
     @Override
-    public void save(PlaceSense placeSense) {
-        placeSenseRepository.save(placeSense);
+    public PlaceSense save(PlaceSense placeSense) {
+        return placeSenseRepository.save(placeSense);
     }
 
 }

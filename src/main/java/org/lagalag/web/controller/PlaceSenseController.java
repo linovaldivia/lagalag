@@ -25,10 +25,11 @@ public class PlaceSenseController {
         System.out.println("*** RECEIVED: " + placeSenseDTO);
         PlaceSense placeSense = dtoEntityMapper.map(placeSenseDTO, PlaceSense.class);
         System.out.println("Entity: " + placeSense);
-        placeSenseService.save(placeSense);
+        placeSense = placeSenseService.save(placeSense);
         
-        PlaceSenseStats stats = placeSenseService.getStats();
         SavePlaceSenseResponseDTO respDTO = new SavePlaceSenseResponseDTO();
+        respDTO.placeSenseId = placeSense.getId();
+        PlaceSenseStats stats = placeSenseService.getStats();
         respDTO.stats = dtoEntityMapper.map(stats, PlaceSenseStatsDTO.class);
         return respDTO;
     }

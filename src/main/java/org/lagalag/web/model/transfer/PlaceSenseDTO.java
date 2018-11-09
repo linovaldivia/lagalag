@@ -9,6 +9,7 @@ import lombok.ToString;
  */
 @ToString
 public class PlaceSenseDTO {
+    public Long id;
     public String placeName;
     public String placeCountryCode;
     public LatLngDTO placeLatLng;

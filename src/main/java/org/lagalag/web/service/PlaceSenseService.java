@@ -4,5 +4,5 @@ import org.lagalag.web.model.entity.PlaceSense;
 
 public interface PlaceSenseService {
     PlaceSenseStats getStats();
-    void save(PlaceSense placeSense);
+    PlaceSense save(PlaceSense placeSense);
 }

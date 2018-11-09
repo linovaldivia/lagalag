@@ -9,5 +9,6 @@ import lombok.ToString;
  */
 @ToString
 public class SavePlaceSenseResponseDTO {
+    public Long placeSenseId;
     public PlaceSenseStatsDTO stats;
 }
