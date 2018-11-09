@@ -1,6 +1,7 @@
 package org.lagalag.web.controller;
 
 import org.lagalag.web.config.LagalagProperty;
+import org.lagalag.web.service.PlaceSenseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
@@ -16,8 +17,15 @@ public class LagalagController {
     @Autowired
     private Environment env;
     
+    @Autowired
+    private PlaceSenseService placeSenseService;
+    
     @GetMapping("/")
     public String homePage(Model model) {
+        int numPlaces = placeSenseService.getPlacesCount();
+        int numCountries = placeSenseService.getCountriesCount();
+        model.addAttribute("numPlaces", numPlaces);
+        model.addAttribute("numCountries", numCountries);
         return "index";
     }
     

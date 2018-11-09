@@ -24,3 +24,11 @@ body {
 	width: 100%;
 	height: 100%;
 }
+
+.stats-places {
+	margin: 0 15px;
+}
+
+.stats-countries {
+    margin: 0 15px;
+}

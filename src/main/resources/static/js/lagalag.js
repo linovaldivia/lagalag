@@ -1,5 +1,6 @@
 /**
  * lagalag javascript functions.
+ * TODO rename js, css to match html file name
  */
 var gLagamap = null;
 var gPlaceSenseWindow = null;
@@ -50,7 +51,10 @@ function openEmptyPlaceSenseWindow(latLng) {
 function onPlaceSenseWindowSave(selectedSense) {
     gPlaceSense.sense = selectedSense;
     console.log("Saving PlaceSense: " + JSON.stringify(gPlaceSense));
-    postJSON("/place-sense", gPlaceSense).fail(function() {
+    postJSON("/place-sense", gPlaceSense).done(function(respData) {
+        console.log("Received response: " + JSON.stringify(respData));
+        window.parent.updatePlaceStats(respData);
+    }).fail(function() {
         console.error("Unable to save PlaceSense for current place: " + gPlaceSense.placeName)
     });
     configureCurrentMarkerOnSave();

@@ -8,6 +8,8 @@
 	    <link rel="stylesheet" type="text/css" th:href="@{webjars/bootstrap/{version}/css/bootstrap.min.css(version=${bootstrapVersion})}">
 	    <!-- "Cover" bootstrap template -->
 	    <link rel="stylesheet" type="text/css" href="res/css/cover-white.css">
+        <!-- The awesome Fontawesome CSS -->
+        <link rel="stylesheet" type="text/css" th:href="@{webjars/font-awesome/{version}/css/all.min.css(version=${faVersion})}">
 	    <!-- Our styles -->
 	    <link rel="stylesheet" type="text/css" href="res/css/lagalag.css">
 	
@@ -15,6 +17,8 @@
 	    <script type="text/javascript" th:src="@{webjars/jquery/{version}/jquery.min.js(version=${jqueryVersion})}" defer></script>
 	    <!-- Bootstrap core JavaScript -->
 	    <script type="text/javascript" th:src="@{webjars/bootstrap/{version}/js/bootstrap.min.js(version=${bootstrapVersion})}" defer></script>
+        <!-- Our javascript functions for this document -->
+        <script type="text/javascript" src="res/js/index.js" defer></script>
 	</head>
 	<body>
 	    <div class="site-wrapper">
@@ -30,6 +34,11 @@
 	
 		            <div id="map-container" class="inner cover">
 		                <iframe id="map-frame" src="/map"></iframe>          
+		            </div>
+		            
+			        <div id="stats">
+				        <span class="stats-places"><span class="fas fa-map-marker-alt"></span> Places: <span id="numPlaces" th:text="${numPlaces}">5</span></span>
+				        <span class="stats-countries"><span class="fas fa-globe-africa"></span> Countries: <span id="numCountries" th:text="${numCountries}">3</span></span>
 		            </div>
 	
 		            <div class="mastfoot">
