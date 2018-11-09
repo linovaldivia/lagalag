@@ -6,5 +6,5 @@ import lombok.Data;
 public class PlaceSense {
     private Long id;
     private Place place;
-    private String sense;
+    private Sense sense;
 }
