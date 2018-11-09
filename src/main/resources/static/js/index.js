@@ -3,8 +3,8 @@
  */
 
 function updatePlaceStats(placeStats) {
-    $("#numPlaces").html(placeStats.numPlaces);
-    $("#numCountries").html(placeStats.numCountries);
+    $("#numVisitedPlaces").html(placeStats.numVisitedPlaces);
+    $("#numVisitedCountries").html(placeStats.numVisitedCountries);
 }
 
 $(document).ready(function() {

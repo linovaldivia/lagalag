@@ -1,7 +1,10 @@
 package org.lagalag.web.controller;
 
 import org.lagalag.web.config.LagalagProperty;
+import org.lagalag.web.model.transfer.PlaceSenseStatsDTO;
 import org.lagalag.web.service.PlaceSenseService;
+import org.lagalag.web.service.PlaceSenseStats;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
@@ -20,12 +23,14 @@ public class LagalagController {
     @Autowired
     private PlaceSenseService placeSenseService;
     
+    @Autowired
+    private ModelMapper dtoEntityMapper;
+    
     @GetMapping("/")
     public String homePage(Model model) {
-        int numPlaces = placeSenseService.getPlacesCount();
-        int numCountries = placeSenseService.getCountriesCount();
-        model.addAttribute("numPlaces", numPlaces);
-        model.addAttribute("numCountries", numCountries);
+        PlaceSenseStats stats = placeSenseService.getStats();
+        PlaceSenseStatsDTO statsDTO = dtoEntityMapper.map(stats, PlaceSenseStatsDTO.class);
+        model.addAttribute("stats", statsDTO);
         return "index";
     }
     

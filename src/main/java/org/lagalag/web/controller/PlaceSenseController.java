@@ -2,8 +2,10 @@ package org.lagalag.web.controller;
 
 import org.lagalag.web.model.entity.PlaceSense;
 import org.lagalag.web.model.transfer.PlaceSenseDTO;
+import org.lagalag.web.model.transfer.PlaceSenseStatsDTO;
 import org.lagalag.web.model.transfer.SavePlaceSenseResponseDTO;
 import org.lagalag.web.service.PlaceSenseService;
+import org.lagalag.web.service.PlaceSenseStats;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class PlaceSenseController {
     @Autowired
-    private ModelMapper dtoToEntityMapper;
+    private ModelMapper dtoEntityMapper;
     
     @Autowired
     private PlaceSenseService placeSenseService;
@@ -21,13 +23,13 @@ public class PlaceSenseController {
     @PostMapping("/place-sense")
     public SavePlaceSenseResponseDTO savePlaceSense(@RequestBody PlaceSenseDTO placeSenseDTO) {
         System.out.println("*** RECEIVED: " + placeSenseDTO);
-        PlaceSense placeSense = dtoToEntityMapper.map(placeSenseDTO, PlaceSense.class);
+        PlaceSense placeSense = dtoEntityMapper.map(placeSenseDTO, PlaceSense.class);
         System.out.println("Entity: " + placeSense);
         placeSenseService.save(placeSense);
         
+        PlaceSenseStats stats = placeSenseService.getStats();
         SavePlaceSenseResponseDTO respDTO = new SavePlaceSenseResponseDTO();
-        respDTO.numPlaces = placeSenseService.getPlacesCount();
-        respDTO.numCountries = placeSenseService.getCountriesCount();
+        respDTO.stats = dtoEntityMapper.map(stats, PlaceSenseStatsDTO.class);
         return respDTO;
     }
 }

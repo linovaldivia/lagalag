@@ -53,7 +53,7 @@ function onPlaceSenseWindowSave(selectedSense) {
     console.log("Saving PlaceSense: " + JSON.stringify(gPlaceSense));
     postJSON("/place-sense", gPlaceSense).done(function(respData) {
         console.log("Received response: " + JSON.stringify(respData));
-        window.parent.updatePlaceStats(respData);
+        window.parent.updatePlaceStats(respData.stats);
     }).fail(function() {
         console.error("Unable to save PlaceSense for current place: " + gPlaceSense.placeName)
     });
