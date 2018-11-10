@@ -1,8 +1,8 @@
 # lagalag: the web app (Spring Boot, Bootstrap, Google Maps)
 
-![screenshot](/screenshots/mult-cities-marked-color.png)
+![screenshot](/screenshots/mainscreen.png)
 
-_Screenshot (as of Oct 27 2018): when a user clicks on the map, a marker and a popup showing the name of the closest city/town appears. Users can then give their opinion (or Sense) about a place. The colors of the markers correspond to the user's sentiment about a place._
+_Screenshot (as of Nov 10 2018): when a user clicks on the map, a marker and a popup showing the name of the closest city/town appears. Users can then give their opinion (or Sense) about a place. The colors of the markers correspond to the user's sentiment about a place. Below the map interesting stats about the user's travel activity is shown._
 
 This project demonstrates the use of several popular web technologies to create a functional web application.
 
